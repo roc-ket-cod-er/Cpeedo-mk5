@@ -2,7 +2,7 @@
 
 >This project was funded by Hack Club's Blueprint program. Without their support, this project would not have been possible.
 
-A _REALLY_ fancy bike speedo.
+A _REALLY_ fancy bike speedo, designed in EasyEDA Pro and Fusion 360.
 
 ![0077](https://github.com/user-attachments/assets/feea3d7d-3d2a-4b13-b158-af5bbd43f456)
 
