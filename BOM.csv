@@ -1,4 +1,4 @@
-Item,Cost (native),Cost (USD),Link,NOTE,TOTAL:
+Item,Cost (native),Cost (USD),Link,NOTE,TOTAL (USD):
 PCB,US$199.53+13%GST,$225.47,JLCPCB.com,GST may not be collected.,$340.89
 SIM card,CA$25,$20.76,simbase.com,Includes Adding Funds to the SIM. Taxes may reduce 13%,
 Waveshare,US$62.47,$62.47,https://www.waveshare.com/catalog/product/view/id/6414/s/2.8inch-capacitive-touch-lcd/category/398/ and https://www.waveshare.com/2.9inch-e-paper-module.htm,"Includes 2x LCD, + 1x E-INK + Shipping. Taxes may increase by 13%",
@@ -6,3 +6,4 @@ Waveshare,US$62.47,$62.47,https://www.waveshare.com/catalog/product/view/id/6414
 Screws,US$7.83+13% GST,$8.85,https://www.aliexpress.com/item/1005005523283652.html,"M2.5x8mm, 100pcs (minimum selected)",
 Screw Head,US$2.94+13% GST,$3.32,https://www.aliexpress.com/item/1005003319507557.html,T8,
 Compas Pre-Order,US$8.87 +13% GST,$10.02,jlcpcb.com,I may change the compas as it went out of stock :(,
+
