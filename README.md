@@ -1,6 +1,6 @@
 # Cpeedo-mk5
 
->NOTE: This project was funded by Hack Club's Blueprint program. Without their support, this project would not have been possible.
+>This project was funded by Hack Club's Blueprint program. Without their support, this project would not have been possible.
 
 A _REALLY_ fancy bike speedo.
 
