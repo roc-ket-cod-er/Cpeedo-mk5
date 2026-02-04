@@ -94,4 +94,6 @@ In this repository, you will find the files you need to print the case yourself,
 |3D print        |--              |$10.00    |Library                                                                                                                                                     |Estimate                                                         |       |
 |Screws          |US$7.83+13% GST |$8.85     |https://www.aliexpress.com/item/1005005523283652.html                                                                                                       |M2.5x8mm, 100pcs (minimum selected)                              |       |
 |Screw Head      |US$2.94+13% GST |$3.32     |https://www.aliexpress.com/item/1005003319507557.html                                                                                                       |T8                                                               |       |
-|Compas Pre-Order|US$8.87 +13% GST|$10.02    |jlcpcb.com                                                                                                                                                  |I may change the compas as it went out of stock :(               |       |
+|~Compas Pre-Order~|~US$8.87 +13% GST~|~$10.02~|~jlcpcb.com~                                                                                                                                              |~I may change the compas as it went out of stock :(~             |       |
+
+add like $5 because the compas came back instock!
