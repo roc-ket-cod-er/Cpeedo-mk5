@@ -84,6 +84,21 @@ In addition, I have become increasingly paranoid about my bike being stolen, thu
 
 In this repository, you will find the files you need to print the case yourself, along side to get the PCB manufactured. The code too, shall come with time. Thus, it is as simple as loading the code onto the board, and you should be good. The LCDs have ribbon cables, making the connection really easy, whilst the E-INK required the normal jumper wires to be hooked up.
 
+## Schematic
+
+Here's the schematic in case you want to see it in PNG form!
+
+<img width="1190" height="845" alt="SCH_Schematic1_1-Cellular_2026-02-10" src="https://github.com/user-attachments/assets/e982c5ba-9f4c-4128-9de8-d939f15fc754" />
+
+<img width="1190" height="845" alt="SCH_Schematic1_2-GNSS - GPS_2026-02-10" src="https://github.com/user-attachments/assets/3c2199e1-7891-43b8-82a0-0c8d7a1e6cbb" />
+
+<img width="1190" height="845" alt="SCH_Schematic1_3-STM32_2026-02-10" src="https://github.com/user-attachments/assets/98f8b78d-20f9-4209-8730-38ad65feadc7" />
+
+<img width="1190" height="845" alt="SCH_Schematic1_4-ESP32_2026-02-10" src="https://github.com/user-attachments/assets/ed189057-bf6f-414f-88a0-770d487a4603" />
+
+<img width="1190" height="845" alt="SCH_Schematic1_5-STM32_Sensors_2026-02-10" src="https://github.com/user-attachments/assets/3747364b-69ad-4392-b6ec-2bc7f2182c8a" />
+
+
 ## BOM
 
 |Item            |Cost (native)   |Cost (USD)|Link                                                                                                                                                        |NOTE                                                             |TOTAL: |
