@@ -99,7 +99,7 @@ Here's the schematic in case you want to see it in PNG form!
 <img width="1190" height="845" alt="SCH_Schematic1_5-STM32_Sensors_2026-02-10" src="https://github.com/user-attachments/assets/3747364b-69ad-4392-b6ec-2bc7f2182c8a" />
 
 
-## BOM
+## BOM (PRICES MAY HAVE CHANGED: THIS IS FROM ~JAN 29)
 
 |Item            |Cost (native)   |Cost (USD)|Link                                                                                                                                                        |NOTE                                                             |TOTAL: |
 |----------------|----------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------|-------|
