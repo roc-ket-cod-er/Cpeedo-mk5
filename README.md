@@ -4,9 +4,9 @@
 
 A _REALLY_ fancy bike speedo, designed in EasyEDA Pro and Fusion 360.
 
-![0077](https://github.com/user-attachments/assets/feea3d7d-3d2a-4b13-b158-af5bbd43f456)
+![WIN_20260330_20_14_14_Pro](https://github.com/user-attachments/assets/ec0ffdfc-849b-4559-aedd-13fdfa4d90c0)
 
-> ⚠️ Looking for mk1 through 5? They are currently unavailible as they ended up not meeting the design requirements and ended up evolving into other boards.
+![WIN_20260330_20_20_43_Pro](https://github.com/user-attachments/assets/d3d685d1-3269-456b-b31e-6b3a4f122dad)
 
 ## Key Features
 
@@ -24,6 +24,7 @@ In addition, it also supports:
 
 <img width="1920" height="1080" alt="0495" src="https://github.com/user-attachments/assets/91539cd3-8342-47a7-b1e2-508bc382deba" />
 
+> ⚠️ Render not up-to-date
 
 The PCB has a 6-layer stackup to keep 2 solid ground planes, that is essential to keep the ground planes completely unbroken otherwise the antenna will be unhappy.
 
