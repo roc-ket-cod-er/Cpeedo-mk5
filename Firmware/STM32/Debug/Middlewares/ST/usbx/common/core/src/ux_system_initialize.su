@@ -1,0 +1,2 @@
+../Middlewares/ST/usbx/common/core/src/ux_system_initialize.c:125:7:_ux_system_initialize	48	static
+../Middlewares/ST/usbx/common/core/src/ux_system_initialize.c:333:7:_uxe_system_initialize	24	static
