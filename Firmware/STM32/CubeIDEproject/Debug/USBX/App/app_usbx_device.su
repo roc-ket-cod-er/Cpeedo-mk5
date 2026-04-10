@@ -1,5 +1,0 @@
-../USBX/App/app_usbx_device.c:74:6:MX_USBX_Device_Init	80	static
-../USBX/App/app_usbx_device.c:171:12:_ux_utility_interrupt_disable	16	static,ignoring_inline_asm
-../USBX/App/app_usbx_device.c:188:6:_ux_utility_interrupt_restore	24	static,ignoring_inline_asm
-../USBX/App/app_usbx_device.c:202:7:_ux_utility_time_get	16	static
-../USBX/App/app_usbx_device.c:219:13:USBD_ChangeFunction	24	static

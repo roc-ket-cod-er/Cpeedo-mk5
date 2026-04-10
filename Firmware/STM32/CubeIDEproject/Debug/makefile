@@ -9,9 +9,6 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include USBX/App/subdir.mk
--include Middlewares/ST/usbx/common/usbx_stm32_device_controllers/subdir.mk
--include Middlewares/ST/usbx/common/usbx_device_classes/src/subdir.mk
 -include Middlewares/ST/usbx/common/core/src/subdir.mk
 -include Drivers/STM32U5xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
