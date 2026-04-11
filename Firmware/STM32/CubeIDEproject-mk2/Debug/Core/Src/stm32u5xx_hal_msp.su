@@ -1,0 +1,5 @@
+../Core/Src/stm32u5xx_hal_msp.c:63:6:HAL_MspInit	16	static
+../Core/Src/stm32u5xx_hal_msp.c:86:6:HAL_I2C_MspInit	240	static
+../Core/Src/stm32u5xx_hal_msp.c:133:6:HAL_I2C_MspDeInit	16	static
+../Core/Src/stm32u5xx_hal_msp.c:164:6:HAL_PCD_MspInit	248	static
+../Core/Src/stm32u5xx_hal_msp.c:226:6:HAL_PCD_MspDeInit	16	static
