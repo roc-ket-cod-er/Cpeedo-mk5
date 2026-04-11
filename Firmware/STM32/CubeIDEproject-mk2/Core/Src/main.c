@@ -68,6 +68,11 @@ PCD_HandleTypeDef hpcd_USB_OTG_FS;
 bool esp_on = false;
 int esp_on_ticks = 0;
 int update = 0;
+
+#define BUFFER_SIZE 64
+uint8_t buffer[BUFFER_SIZE];
+uint32_t received = 0;
+uint32_t sent=0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -137,6 +142,13 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1) {
 	  ux_device_stack_tasks_run();
+	  USBD_CDC_ACM_Receive(buffer, BUFFER_SIZE, &received);
+	  if(received!=0) {
+		  write_io(LED, ON);
+		  USBD_CDC_ACM_Transmit(buffer, received, &sent);
+		  received = 0;
+	  }
+#if 0
 	  // TURN OFF ESP32 - if ESP32 sends turn_off signal, turn it off.
 	  if(read_io(RX)) {
 		  HAL_Delay(10); 							// Pause to see if it was accidental
@@ -197,6 +209,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+#endif
   }
   /* USER CODE END 3 */
 }
