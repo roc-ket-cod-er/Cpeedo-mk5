@@ -144,7 +144,12 @@ int main(void)
 	  ux_device_stack_tasks_run();
 	  USBD_CDC_ACM_Receive(buffer, BUFFER_SIZE, &received);
 	  if(received!=0) {
-		  write_io(LED, ON);
+		  for (int i=0; i<received; i++) {
+			  write_io(LED, ON);
+			  HAL_Delay(200);
+			  write_io(LED, OFF);
+			  HAL_Delay(200);
+		  }
 		  USBD_CDC_ACM_Transmit(buffer, received, &sent);
 		  received = 0;
 	  }
