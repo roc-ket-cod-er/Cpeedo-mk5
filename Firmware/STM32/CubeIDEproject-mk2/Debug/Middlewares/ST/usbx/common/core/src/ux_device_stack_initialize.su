@@ -1,0 +1,2 @@
+../Middlewares/ST/usbx/common/core/src/ux_device_stack_initialize.c:118:7:_ux_device_stack_initialize	88	static
+../Middlewares/ST/usbx/common/core/src/ux_device_stack_initialize.c:511:7:_uxe_device_stack_initialize	48	static

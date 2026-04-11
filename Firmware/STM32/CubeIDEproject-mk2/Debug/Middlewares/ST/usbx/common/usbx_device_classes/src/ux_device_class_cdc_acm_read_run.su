@@ -1,0 +1,2 @@
+../Middlewares/ST/usbx/common/usbx_device_classes/src/ux_device_class_cdc_acm_read_run.c:94:6:_ux_device_class_cdc_acm_read_run	48	static
+../Middlewares/ST/usbx/common/usbx_device_classes/src/ux_device_class_cdc_acm_read_run.c:369:6:_uxe_device_class_cdc_acm_read_run	24	static
