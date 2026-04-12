@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "stdbool.h"
+#include "string.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -66,13 +67,15 @@ PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 /* USER CODE BEGIN PV */
 bool esp_on = false;
-int esp_on_ticks = 0;
-int update = 0;
+uint32_t esp_on_ticks = 0;
+uint8_t update = 0;
+uint32_t last_printed_tick = 0;
+
 
 #define BUFFER_SIZE 64
 uint8_t buffer[BUFFER_SIZE];
 uint32_t received = 0;
-uint32_t sent=0;
+uint32_t sent = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -90,6 +93,10 @@ int read_io(io pin) {
 	return HAL_GPIO_ReadPin(pin.port, pin.pin);
 }
 
+void print(uint8_t* text) {
+	int tbplen = strlen((char*)text);
+	USBD_CDC_ACM_Transmit(text, tbplen, &sent);
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -142,18 +149,13 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1) {
 	  ux_device_stack_tasks_run();
-	  USBD_CDC_ACM_Receive(buffer, BUFFER_SIZE, &received);
-	  if(received!=0) {
-		  for (int i=0; i<received; i++) {
-			  write_io(LED, ON);
-			  HAL_Delay(200);
-			  write_io(LED, OFF);
-			  HAL_Delay(200);
-		  }
-		  USBD_CDC_ACM_Transmit(buffer, received, &sent);
-		  received = 0;
+
+	  if (HAL_GetTick()%100 == 0 && last_printed_tick != HAL_GetTick()) {
+		  sprintf((char*)buffer, "ESP: %d\n", esp_on);
+		  print((uint8_t*)buffer);
+		  last_printed_tick = HAL_GetTick();
 	  }
-#if 0
+
 	  // TURN OFF ESP32 - if ESP32 sends turn_off signal, turn it off.
 	  if(read_io(RX)) {
 		  HAL_Delay(10); 							// Pause to see if it was accidental
@@ -214,7 +216,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-#endif
   }
   /* USER CODE END 3 */
 }
@@ -231,7 +232,7 @@ void SystemClock_Config(void)
 
   /** Configure the main internal regulator output voltage
   */
-  if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE2) != HAL_OK)
+  if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE3) != HAL_OK)
   {
     Error_Handler();
   }
@@ -245,10 +246,10 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLMBOOST = RCC_PLLMBOOST_DIV1;
   RCC_OscInitStruct.PLL.PLLM = 1;
-  RCC_OscInitStruct.PLL.PLLN = 16;
+  RCC_OscInitStruct.PLL.PLLN = 14;
   RCC_OscInitStruct.PLL.PLLP = 2;
   RCC_OscInitStruct.PLL.PLLQ = 2;
-  RCC_OscInitStruct.PLL.PLLR = 2;
+  RCC_OscInitStruct.PLL.PLLR = 6;
   RCC_OscInitStruct.PLL.PLLRGE = RCC_PLLVCIRANGE_1;
   RCC_OscInitStruct.PLL.PLLFRACN = 0;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -262,7 +263,7 @@ void SystemClock_Config(void)
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2
                               |RCC_CLOCKTYPE_PCLK3;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV2;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB3CLKDivider = RCC_HCLK_DIV1;
@@ -304,7 +305,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.Timing = 0x20303E5D;
+  hi2c1.Init.Timing = 0x20202A2F;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;

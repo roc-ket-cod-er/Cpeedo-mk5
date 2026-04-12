@@ -2,4 +2,4 @@
 ../USBX/App/ux_device_cdc_acm.c:81:6:USBD_CDC_ACM_Deactivate	16	static
 ../USBX/App/ux_device_cdc_acm.c:97:6:USBD_CDC_ACM_ParameterChange	16	static
 ../USBX/App/ux_device_cdc_acm.c:107:10:USBD_CDC_ACM_Transmit	32	static
-../USBX/App/ux_device_cdc_acm.c:119:10:USBD_CDC_ACM_Receive	24	static
+../USBX/App/ux_device_cdc_acm.c:121:10:USBD_CDC_ACM_Receive	24	static

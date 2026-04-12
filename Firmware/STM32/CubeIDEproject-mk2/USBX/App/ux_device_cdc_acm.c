@@ -43,7 +43,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-UX_SLAVE_CLASS_CDC_ACM *cdc_acm=NULL;
+UX_SLAVE_CLASS_CDC_ACM  *cdc_acm=NULL;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -104,24 +104,28 @@ VOID USBD_CDC_ACM_ParameterChange(VOID *cdc_acm_instance)
 }
 
 /* USER CODE BEGIN 1 */
-uint32_t USBD_CDC_ACM_Transmit(uint8_t* buffer, uint32_t size, uint32_t* sent) {
-	UINT retVal;
-	if(cdc_acm!=NULL) {
-		do{
-			retVal = ux_device_class_cdc_acm_write_run(cdc_acm, buffer, size, sent);
-		}while(UX_STATE_NEXT != retVal);
-		return 0;
-	} else {
-		return 1;
-	}
+uint32_t USBD_CDC_ACM_Transmit(uint8_t* buffer, uint32_t size, uint32_t* sent){
+    UINT retVal;
+    if(cdc_acm!=NULL){
+      do
+      {
+        retVal = ux_device_class_cdc_acm_write_run(cdc_acm,buffer,size,sent);
+        ux_device_stack_tasks_run();
+      }while(UX_STATE_NEXT != retVal);
+      return 0;
+    }else{
+      return 1;
+    }
 }
 
-uint32_t USBD_CDC_ACM_Receive(uint8_t* buffer, uint32_t size, uint32_t* received) {
-	if(cdc_acm != NULL) {
-		ux_device_class_cdc_acm_read_run(cdc_acm, buffer, size, received);
-		return 0;
-	} else {
-		return 1;
-	}
+uint32_t USBD_CDC_ACM_Receive(uint8_t* buffer, uint32_t size, uint32_t* received){
+  if(cdc_acm!=NULL){
+    ux_device_class_cdc_acm_read_run(cdc_acm,buffer,size,received);
+    return 0;
+  }else{
+   return 1;
+  }
+
 }
+
 /* USER CODE END 1 */
