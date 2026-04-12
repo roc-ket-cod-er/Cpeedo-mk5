@@ -49,6 +49,10 @@ typedef struct {
 #define ON_OFF		(io){GPIOB, IN2_Pin}
 #define ESP_UPDATE	(io){GPIOA, GPIO_PIN_1}
 
+// Clock States
+#define MHz48 1
+#define lwPWR 2
+
 // Others
 #define wake_pause  1000
 
@@ -70,6 +74,7 @@ bool esp_on = false;
 uint32_t esp_on_ticks = 0;
 uint8_t update = 0;
 uint32_t last_printed_tick = 0;
+uint8_t clock_state;
 
 
 #define BUFFER_SIZE 64
@@ -96,8 +101,20 @@ int read_io(io pin) {
 }
 
 void print(uint8_t* text) {
-	int tbplen = strlen((char*)text);
-	USBD_CDC_ACM_Transmit(text, tbplen, &sent);
+	if (clock_state == lwPWR) {
+		SystemClock_ConfigUSB();
+	}
+    int len = strlen((char*)text);
+    int offset = 0;
+    while (offset < len) {
+        int chunk_size = (len - offset > 8) ? 8 : (len - offset);
+        USBD_CDC_ACM_Transmit(text + offset, chunk_size, &sent);
+        offset += chunk_size;
+        ux_device_stack_tasks_run();
+    }
+	if (clock_state == lwPWR) {
+		SystemClock_Config();
+	}
 }
 /* USER CODE END PFP */
 
@@ -130,7 +147,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  clock_state = lwPWR;
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -139,26 +156,21 @@ int main(void)
   MX_I2C1_Init();
   MX_USBX_Device_Init();
   /* USER CODE BEGIN 2 */
-  int start = HAL_GetTick();
-
-  while (HAL_GetTick() < start + 15000){
-	  int q = 91/42;
-	  q -= 15;
-  }
-
   SystemClock_ConfigUSB();
+  clock_state = MHz48;
 
   MX_USB_OTG_FS_PCD_Init();
 
   write_io(ESP_PWR, OFF);
   write_io(ESP_UPDATE, OFF);
   write_io(LED, OFF);
-  start = HAL_GetTick();
-  while (HAL_GetTick() < start + 15000) {
+
+  int start = HAL_GetTick();
+  while (HAL_GetTick() < start + 500) {
 	  ux_device_stack_tasks_run();
 
 	  if (HAL_GetTick()%100 == 0 && last_printed_tick != HAL_GetTick()) {
-		  sprintf((char*)buffer, "ESP: %d\n", esp_on);
+		  sprintf((char*)buffer, (esp_on) ? "The ESP32 is ON (ESP: %d)\n" : "The ESP32 is OFF (ESP: %d)\n", esp_on);
 		  print((uint8_t*)buffer);
 		  last_printed_tick = HAL_GetTick();
 	  }
@@ -166,11 +178,19 @@ int main(void)
 
 
   SystemClock_Config();
+  clock_state = lwPWR;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
+	  ux_device_stack_tasks_run();
+
+	  if (HAL_GetTick()%1000 == 0 && last_printed_tick != HAL_GetTick()) {
+	  		  sprintf((char*)buffer, (esp_on) ? "The ESP32 is ON (ESP: %d)\n" : "The ESP32 is OFF (ESP: %d)\n", esp_on);
+	  		  print((uint8_t*)buffer);
+	  		  last_printed_tick = HAL_GetTick();
+	  	  }
 	  // TURN OFF ESP32 - if ESP32 sends turn_off signal, turn it off.
 	  if(read_io(RX)) {
 		  HAL_Delay(10); 							// Pause to see if it was accidental
