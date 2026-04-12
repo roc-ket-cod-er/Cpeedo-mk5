@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "stdbool.h"
 #include "string.h"
+#include "INA226.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,6 +47,7 @@ typedef struct {
 #define RX 			(io){GPIOA, RX_Pin}
 #define LED 		(io){GPIOE, GPIO_PIN_2}
 #define ESP_PWR 	(io){GPIOC, GPIO_PIN_5}
+#define INA_PWR		(io){GPIOE, GPIO_PIN_3}
 #define ON_OFF		(io){GPIOB, IN2_Pin}
 #define ESP_UPDATE	(io){GPIOA, GPIO_PIN_1}
 
@@ -76,7 +78,7 @@ uint8_t update = 0;
 uint32_t last_printed_tick = 0;
 uint8_t clock_state;
 
-
+// USB
 #define BUFFER_SIZE 64
 uint8_t buffer[BUFFER_SIZE];
 uint32_t received = 0;
@@ -115,6 +117,14 @@ void print(uint8_t* text) {
 	if (clock_state == lwPWR) {
 		SystemClock_Config();
 	}
+}
+
+int current_ua() {
+	return INA226_getShuntV(&hi2c1, INA226_ADDRESS) * 50;
+}
+
+int current_ma() {
+	return (int)(current_ua() / 1000);
 }
 /* USER CODE END PFP */
 
@@ -156,6 +166,7 @@ int main(void)
   MX_I2C1_Init();
   MX_USBX_Device_Init();
   /* USER CODE BEGIN 2 */
+  INA226_setConfig(&hi2c1, INA226_ADDRESS, INA226_MODE_CONT_SHUNT_AND_BUS | INA226_VBUS_140uS | INA226_VBUS_140uS | INA226_AVG_1024);
   SystemClock_ConfigUSB();
   clock_state = MHz48;
 
@@ -170,7 +181,7 @@ int main(void)
 	  ux_device_stack_tasks_run();
 
 	  if (HAL_GetTick()%100 == 0 && last_printed_tick != HAL_GetTick()) {
-		  sprintf((char*)buffer, (esp_on) ? "The ESP32 is ON (ESP: %d)\n" : "The ESP32 is OFF (ESP: %d)\n", esp_on);
+		  sprintf((char*)buffer, "Current: %d\n", current_ua());
 		  print((uint8_t*)buffer);
 		  last_printed_tick = HAL_GetTick();
 	  }
@@ -187,7 +198,7 @@ int main(void)
 	  ux_device_stack_tasks_run();
 
 	  if (HAL_GetTick()%1000 == 0 && last_printed_tick != HAL_GetTick()) {
-	  		  sprintf((char*)buffer, (esp_on) ? "The ESP32 is ON (ESP: %d)\n" : "The ESP32 is OFF (ESP: %d)\n", esp_on);
+		  	  sprintf((char*)buffer, "Current: %d\n", current_ua());
 	  		  print((uint8_t*)buffer);
 	  		  last_printed_tick = HAL_GetTick();
 	  	  }
@@ -467,7 +478,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOE, LED_Pin|INA_PWR_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(INA_PWR_GPIO_Port, INA_PWR_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, ESP_SPEED_BOOT_Pin|TX_Pin, GPIO_PIN_RESET);
