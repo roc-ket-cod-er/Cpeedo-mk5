@@ -166,7 +166,7 @@ int main(void)
   write_io(LED, OFF);
 
   int start = HAL_GetTick();
-  while (HAL_GetTick() < start + 500) {
+  while (HAL_GetTick() < start + 1000) {
 	  ux_device_stack_tasks_run();
 
 	  if (HAL_GetTick()%100 == 0 && last_printed_tick != HAL_GetTick()) {

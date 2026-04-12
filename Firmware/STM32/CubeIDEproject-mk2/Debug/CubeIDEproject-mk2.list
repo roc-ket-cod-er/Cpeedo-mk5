@@ -285,7 +285,7 @@ int main(void)
  80003ca:	f000 ff4f 	bl	800126c <HAL_GetTick>
  80003ce:	4603      	mov	r3, r0
  80003d0:	f8c7 30c4 	str.w	r3, [r7, #196]	@ 0xc4
-  while (HAL_GetTick() < start + 500) {
+  while (HAL_GetTick() < start + 1000) {
  80003d4:	e02a      	b.n	800042c <main+0xe8>
 	  ux_device_stack_tasks_run();
  80003d6:	f008 f9b5 	bl	8008744 <_ux_device_stack_tasks_run>
@@ -328,11 +328,11 @@ int main(void)
  8000426:	4603      	mov	r3, r0
  8000428:	4a94      	ldr	r2, [pc, #592]	@ (800067c <main+0x338>)
  800042a:	6013      	str	r3, [r2, #0]
-  while (HAL_GetTick() < start + 500) {
+  while (HAL_GetTick() < start + 1000) {
  800042c:	f000 ff1e 	bl	800126c <HAL_GetTick>
  8000430:	4602      	mov	r2, r0
  8000432:	f8d7 30c4 	ldr.w	r3, [r7, #196]	@ 0xc4
- 8000436:	f503 73fa 	add.w	r3, r3, #500	@ 0x1f4
+ 8000436:	f503 737a 	add.w	r3, r3, #1000	@ 0x3e8
  800043a:	429a      	cmp	r2, r3
  800043c:	d3cb      	bcc.n	80003d6 <main+0x92>
 	  }
