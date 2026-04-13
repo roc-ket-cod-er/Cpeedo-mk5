@@ -175,6 +175,7 @@ int main(void)
   write_io(ESP_PWR, OFF);
   write_io(ESP_UPDATE, OFF);
   write_io(LED, OFF);
+  write_io(INA_PWR, ON);
 
   int start = HAL_GetTick();
   while (HAL_GetTick() < start + 1000) {
@@ -190,18 +191,19 @@ int main(void)
 
   SystemClock_Config();
   clock_state = lwPWR;
+  write_io(INA_PWR, OFF);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
-	  ux_device_stack_tasks_run();
+	  /*ux_device_stack_tasks_run();
 
 	  if (HAL_GetTick()%1000 == 0 && last_printed_tick != HAL_GetTick()) {
 		  	  sprintf((char*)buffer, "Current: %d\n", current_ua());
 	  		  print((uint8_t*)buffer);
 	  		  last_printed_tick = HAL_GetTick();
-	  	  }
+	  	  } */
 	  // TURN OFF ESP32 - if ESP32 sends turn_off signal, turn it off.
 	  if(read_io(RX)) {
 		  HAL_Delay(10); 							// Pause to see if it was accidental
