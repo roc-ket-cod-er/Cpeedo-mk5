@@ -1,0 +1,3 @@
+key = "YOUR ADAFRUIT IO KEY"
+user_name = "YOUR ADAFRUIT IO USER NAME"
+client_id = "A NAME FOR YOUR DEVICE"
