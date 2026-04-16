@@ -85,3 +85,7 @@ class GPS(object):
         lat_lock =  self.position[1] != 0
         
         return True if lat_lock and long_lock else False
+    
+    @property
+    def hdop(self):
+        return self.gps.hdop

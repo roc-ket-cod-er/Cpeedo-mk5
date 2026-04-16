@@ -73,13 +73,22 @@ def main():
     tft.left.write(
         tft.speed_font,
         b'00',
-        10, 30,
+        5, 20,
         tft.white,
         tft.black)
+    
+    tft.left.text(
+        tft.font,
+        f"{gps.spd%1:0<4.2f}"[2:],
+        190, 165,
+        tft.white,
+        tft.black
+    )
+    
     tft.left.write(
         tft.big_font,
         b'KM/H',
-        10, 200,
+        10, 205,
         tft.white,
         tft.black)
     
@@ -94,13 +103,19 @@ def main():
                 tft.left.write(
                     tft.speed_font,
                     f"{round(gps.spd):02d}",
-                    10, 30,
+                    10, 20,
                     tft.white,
                     tft.black
                 )
                 print("spd")
                 old_speed = round(gps.spd)
-            
+            tft.left.text(
+                tft.font,
+                f"{gps.spd%1:0<4.2f}"[2:],
+                190, 165,
+                tft.white,
+                tft.black
+            )
             tft.right.text(
                 tft.font,
                 str(gps.spd)+"   ",
@@ -108,7 +123,7 @@ def main():
                 tft.white,
                 tft.black
             )
-            print(gps.time, gps.pos, gps.spd, gps.sats)
+            print(gps.time, gps.pos, gps.spd, gps.sats, gps.hdop)
                 
 
 if __name__ == '__main__':
