@@ -242,7 +242,7 @@ int main(void)
 		  }
 	  }
 
-	  if (HAL_GetTick() % 600000 < 2000 && !esp_on) {
+	  if (HAL_GetTick() % 300000 < 2000 && !esp_on) {
 		  write_io(ESP_PWR, ON);					// Turn on ESP32 Regulator
 		  write_io(TX, OFF);						// Stop telling the ESP32 to shut off
 		  write_io(ESP_UPDATE, ON);
@@ -252,7 +252,7 @@ int main(void)
 		  update = 1;
 	  }
 
-	  if (esp_on && esp_on_ticks + 60000 < HAL_GetTick() && update) {
+	  if (esp_on && esp_on_ticks + 80000 < HAL_GetTick() && update) {
 		  write_io(ESP_PWR, OFF);			// Shut it off
 		  write_io(LED, ON);				// Turn on LED
 		  write_io(ESP_UPDATE, ON);

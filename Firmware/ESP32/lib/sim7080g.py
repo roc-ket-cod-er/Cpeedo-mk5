@@ -58,18 +58,18 @@ class Cell(object):
             return None
         
     @property
-    def on(self):
+    def is_on(self):
         if self.pwr_detect.value():
             return True
         return False
     
     @property
-    def off(self):
-        return not self.on
+    def is_off(self):
+        return not self.is_on
     
     
     def power_on(self, shush=False, wait_for_boot=True):
-        if self.on:
+        if self.is_on:
             if not shush:
                 self.warn("already on")
             return
@@ -84,29 +84,36 @@ class Cell(object):
                     break
                 i += 1
             
-    
     def pwr_on(self, shush=False, wait_for_boot=True):
-        return self.turn_on(shush, wait_for_boot)
-        
+        return self.turn_on(shush, wait_for_boot)     
     def turn_on(self, shush=False, wait_for_boot=True):
-        return self.turn_on(shush, wait_for_boot)
-        
+        return self.turn_on(shush, wait_for_boot)      
     def boot(self, shush=False, wait_for_boot=True):
         return self.turn_on(shush, wait_for_boot)
+    def on(self, shush=False, wait_for_boot=True):
+        return self.turn_on(shush, wait_for_boot)
     
     
-    def power_off(self, shush=False, hold=True):
-        if hold:
-            sleep_ms(100)
-        if self.off:
+    def off(self, shush=False, hold=True):
+        if self.is_off:
             if not shush:
                 self.warn("already off")
             return
+        if hold:
+            sleep_ms(100)
         self.pwrkey.value(1)
         sleep_ms(1300)
         self.pwrkey.value(0)
         if hold:
             sleep_ms(2000)
+            
+    def turn_off(self, shush=False, hold=True):
+        self.off(shush=False, hold=True)
+    def power_off(self, shush=False, hold=True):
+        self.off(shush=False, hold=True)
+    def shut_down(self, shush=False, hold=True):
+        self.off(shush=False, hold=True)
+    
     
     def connected(self):
         resp = self.at("SMSTATE?")
@@ -119,7 +126,7 @@ class Cell(object):
         return None
 
     def connect(self, server, url='', force=False):
-        if not self.on:
+        if not self.is_on:
             self.power_on()
             
         while "99,99" in self.at("CSQ"):		# signal
@@ -189,3 +196,9 @@ class Cell(object):
         except Exception as e:
             print(e)
             print(resp)
+            
+    def sleep(self, duration, unit="s"):
+        if unit == "s":
+            sleep_ms(duration * 1000)
+        else:
+            sleep_ms(duration)

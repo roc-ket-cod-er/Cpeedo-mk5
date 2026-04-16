@@ -8,6 +8,7 @@ def do_connect():
     wlan.active(True)
     if not wlan.isconnected():
         print('connecting to network...')
+        #wlan.connect('WRDSB Wireless', None)
         wlan.connect('169 Wissler', 'Happy-2024')
         while not wlan.isconnected():
             pass

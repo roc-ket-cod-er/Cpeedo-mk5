@@ -6,7 +6,9 @@ stm_com.off()
 
 speed_boot = Pin(9, Pin.IN)
 if speed_boot.value():
-    SPEED_BOOT = True
+    from temp_main import track
+    track()
+    
 else:
     SPEED_BOOT = False
 
@@ -214,7 +216,7 @@ def connect_to_cell(server, url='', force=False):
         send_at('AT+SMCONF="URL","io.adafruit.com",1883')
         send_at('AT+SMCONF="CLIENTID","esp32-sim7080g"')
         send_at('AT+SMCONF="USERNAME","space_coder"')
-        send_at('AT+SMCONF="PASSWORD","uhhhhhh why do you want to know????"')
+        send_at('AT+SMCONF="PASSWORD","what ya lookin at???"')
         send_at('AT+SMCONN', 10)
     if server in web:
         send_at('AT+SHCONF="BODYLEN",1024')
@@ -436,34 +438,34 @@ else:
     try:
         power_on()
         i = 0
-        while i < 3000:
+        while i < 300:
             while gnss.any():
                 data = gnss.read()
                 for byte in data:
                     stat = my_gps.update(chr(byte))
-            sleep(0.01)
+            sleep(0.07)
             print(my_gps.satellites_in_use)
             i += 1
-            if my_gps.satellites_in_use > (3000-i)//300:
+            if my_gps.satellites_in_use > (300-i)//30:
                 break
             
-        while i < 5000:
+        while i < 350:
             while gnss.any():
                 data = gnss.read()
                 for byte in data:
                     stat = my_gps.update(chr(byte))
-            sleep(0.01)
+            sleep(0.07)
             print(my_gps.satellites_in_use)
             i += 1
             if my_gps.latitude[0] != 0 and my_gps.longitude[0] != 0:
                 break
         
         connect_to_cell('io')
+        bat_list = send_at('AT+CBC', show=False).split(',')
         if my_gps.latitude[0] != 0 and my_gps.longitude[0] != 0:
-            bat_list = send_at('AT+CBC', show=False).split(',')
             send_message(f"{my_gps.latitude[0]}",  feed='latitude')
             send_message(f"{my_gps.longitude[0]}", feed='longitude')
-            send_message(f"{my_gps.satellites_in_use}s {round(my_gps.speed[2], 2)}km/h {my_gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-5]}mV) wait: {i//100}s", feed='other-info')
+            send_message(f"{my_gps.satellites_in_use}s {round(my_gps.speed[2], 2)}km/h {my_gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-5]}mV) wait: {i//10}s", feed='other-info')
         else:
             send_message(f"NO LOCK: {my_gps.satellites_in_use}s {my_gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-5]}mV)", feed='other-info')
         sleep(0.5)
