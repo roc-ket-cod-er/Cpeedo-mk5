@@ -81,8 +81,8 @@ class GPS(object):
     
     @property
     def lock(self):
-        long_lock = self.position[0] != 0
-        lat_lock =  self.position[1] != 0
+        long_lock = self.position[0][0] != 0
+        lat_lock =  self.position[1][0] != 0
         
         return True if lat_lock and long_lock else False
     
