@@ -1,6 +1,7 @@
 from machine import UART, Pin
 from time import sleep_ms, ticks_ms
 import secrets
+import uasyncio as asyncio
 
 class Cell(object):
     def __init__(self, pwrkey=48, pwr_detect=15, init_uart=True):
@@ -68,7 +69,7 @@ class Cell(object):
         return not self.is_on
     
     
-    def power_on(self, shush=False, wait_for_boot=True):
+    def turn_on(self, shush=False, wait_for_boot=True):
         if self.is_on:
             if not shush:
                 self.warn("already on")
@@ -86,13 +87,41 @@ class Cell(object):
             
     def pwr_on(self, shush=False, wait_for_boot=True):
         return self.turn_on(shush, wait_for_boot)     
-    def turn_on(self, shush=False, wait_for_boot=True):
+    def power_on(self, shush=False, wait_for_boot=True):
         return self.turn_on(shush, wait_for_boot)      
     def boot(self, shush=False, wait_for_boot=True):
         return self.turn_on(shush, wait_for_boot)
     def on(self, shush=False, wait_for_boot=True):
         return self.turn_on(shush, wait_for_boot)
     
+    async def aon(self, shush=False, wait_for_boot=False):
+        if self.is_on:
+            if not shush:
+                self.warn("already on")
+            return
+        self.pwrkey.value(1)
+        await asyncio.sleep_ms(1300)
+        self.pwrkey.value(0)
+        i=0
+        
+        if wait_for_boot:
+            while i < 2000:
+                if self.at("AT", wait=0.1, include='') == "AT\r\r\nOK\r\n":
+                    break
+                i += 1
+
+    async def aoff(self, shush=False, hold=False):
+        if self.is_off:
+            if not shush:
+                self.warn("already off")
+            return
+        if hold:
+            sleep_ms(100)
+        self.pwrkey.value(1)
+        await asyncio.sleep_ms(1500)
+        self.pwrkey.value(0)
+        if hold:
+            sleep_ms(2000)
     
     def off(self, shush=False, hold=True):
         if self.is_off:
@@ -130,7 +159,7 @@ class Cell(object):
             self.power_on()
             
         while "99,99" in self.at("CSQ"):		# signal
-            sleep_ms(100)
+            sleep_ms(50)
             
         mqtt = ['io', 'adafruit', 'mqtt']
         web  = ['https', "web", "http"]
@@ -202,3 +231,15 @@ class Cell(object):
             sleep_ms(duration * 1000)
         else:
             sleep_ms(duration)
+            
+    @property
+    def btry(self):
+        try:
+            btry, btryV = self.at('CBC', show=False).split(',')[1:3]
+            
+            btryV = int(btryV[0:4])
+            btry = int(btry)
+            
+            return btry, btryV
+        except IndexError:
+            return [8191, 8191]

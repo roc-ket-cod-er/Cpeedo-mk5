@@ -1,6 +1,6 @@
 from micropyGPS import MicropyGPS
 from machine import UART
-from time import sleep_ms
+from time import sleep_ms, ticks_ms
 
 class GPS(object):
     def __init__(self, uart_id=2, rx=5, tx=4, tmzone=-4):
@@ -8,20 +8,28 @@ class GPS(object):
         self.gps = MicropyGPS(tmzone, 'dd')
         self.cmd("$PMTK251,115200*1F")
         sleep_ms(100)
-        self.uart = UART(uart_id, baudrate=115200, rx=rx, tx=tx)
+        self.uart = UART(uart_id, baudrate=115200, rx=rx, tx=tx, rxbuf=4096)
         self.cmd("$PMTK220,200*2C")
         self.last_given_timestamp = []
         self.last_speed = 0
+        self.allow_update = True
+        self.shut_down = False
         
         
     def cmd(self, msg):
         self.uart.write(f"{msg}\r\n")
         
     def update(self):
-        if self.uart.any():
-            data = self.uart.read()
-            for char in data:
-                self.gps.update(chr(char))
+        start = ticks_ms()
+        try:
+            a_bytes = self.uart.any()
+            if a_bytes:
+                data = self.uart.read()
+                for char in data:
+                    self.gps.update(chr(char))
+        except IndexError:
+            return False
+        return ticks_ms()-start, a_bytes
                 
     @property
     def time(self):
@@ -39,7 +47,7 @@ class GPS(object):
     @property
     def speed(self):
         self.rq()
-        self.last_speed = round(self.gps.speed[2], 2)
+        self.last_speed = round(self.gps.speed[2], 1)
         return self.last_speed
     @property
     def spd(self):
@@ -58,7 +66,8 @@ class GPS(object):
         return True if round(last, digit) != round(self.speed, digit) else False
     
     def rq(self):
-        self.update()
+        if self.allow_update:
+            self.update()
         self.last_given_timestamp = self.gps.timestamp
         
     @property
@@ -89,3 +98,17 @@ class GPS(object):
     @property
     def hdop(self):
         return self.gps.hdop
+    
+    def ban_updates(self):
+        self.allow_update=False
+    def allow_updates(self):
+        self.allow_update=True
+        
+    def off(self):
+        self.rq()
+        self.cmd("$PMTK161,0*28")
+        self.shut_down = True
+    def on(self):
+        self.cmd("#")
+        self.rq()
+        self.shut_down = False
