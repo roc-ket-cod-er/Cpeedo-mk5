@@ -126,6 +126,10 @@ int current_ua() {
 int current_ma() {
 	return (int)(current_ua() / 1000);
 }
+
+int voltage_mv() {
+	return (int)(INA226_getBusV(&hi2c1, INA226_ADDRESS));
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -178,10 +182,10 @@ int main(void)
   write_io(INA_PWR, ON);
 
   int start = HAL_GetTick();
-  while (HAL_GetTick() < start + 1000) {
+  while (HAL_GetTick() < start + 1500) {
 	  ux_device_stack_tasks_run();
 
-	  if (HAL_GetTick()%100 == 0 && last_printed_tick != HAL_GetTick()) {
+	  if (HAL_GetTick()%10 == 0 && last_printed_tick != HAL_GetTick()) {
 		  sprintf((char*)buffer, "Current: %d\n", current_ua());
 		  print((uint8_t*)buffer);
 		  last_printed_tick = HAL_GetTick();
@@ -199,8 +203,22 @@ int main(void)
   while (1) {
 	  ux_device_stack_tasks_run();
 
+	  if (voltage_mv() < 3200) {
+		  // Enter standby
+		  write_io(TX, ON);						// Send off signal to ESP32
+		  write_io(LED, ON);					// Turn on LED
+
+		  HAL_Delay(15000);
+
+		  write_io(ESP_PWR, OFF);
+		  write_io(LED, OFF);
+		  HAL_PWR_EnterSTANDBYMode();
+	  }
+
 	  if (HAL_GetTick()%1000 == 0 && last_printed_tick != HAL_GetTick()) {
-		  	  sprintf((char*)buffer, "Current: %d\n", current_ua());
+		  	  sprintf((char*)buffer, "Current: %d µA\n", current_ua());
+	  		  print((uint8_t*)buffer);
+		  	  sprintf((char*)buffer, "Voltage: %d mV\n", voltage_mv());
 	  		  print((uint8_t*)buffer);
 	  		  last_printed_tick = HAL_GetTick();
 	  	  }
@@ -242,7 +260,7 @@ int main(void)
 		  }
 	  }
 
-	  if (HAL_GetTick() % 300000 < 2000 && !esp_on) {
+	  if (HAL_GetTick() % 300000 < 3000 && !esp_on) {
 		  write_io(ESP_PWR, ON);					// Turn on ESP32 Regulator
 		  write_io(TX, OFF);						// Stop telling the ESP32 to shut off
 		  write_io(ESP_UPDATE, ON);
