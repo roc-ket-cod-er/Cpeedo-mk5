@@ -1,6 +1,6 @@
 # Cpeedo-mk5
 
->This project was funded by Hack Club's Blueprint program. Without their support, this project would not have been possible.
+>This project was funded by [Hack Club](https://hackclub.com/)'s Blueprint program. Hackclub is a registered, US based non-profit. Without their support, this project would not have been possible.
 
 A _REALLY_ fancy bike speedo, designed in EasyEDA Pro and Fusion 360.
 
