@@ -25,6 +25,8 @@
 #include "stdbool.h"
 #include "string.h"
 #include "INA226.h"
+#include "CSE_CST328.h"
+#include "stdarg.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,6 +52,7 @@ typedef struct {
 #define INA_PWR		(io){GPIOE, GPIO_PIN_3}
 #define ON_OFF		(io){GPIOB, IN2_Pin}
 #define ESP_UPDATE	(io){GPIOA, GPIO_PIN_1}
+#define TP1_RST		(io){GPIOE, GPIO_PIN_15}
 
 // Clock States
 #define MHz48 1
@@ -68,6 +71,7 @@ typedef struct {
 /* Private variables ---------------------------------------------------------*/
 
 I2C_HandleTypeDef hi2c1;
+I2C_HandleTypeDef hi2c2;
 
 PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
@@ -77,12 +81,17 @@ uint32_t esp_on_ticks = 0;
 uint8_t update = 0;
 uint32_t last_printed_tick = 0;
 uint8_t clock_state;
+uint32_t last_update_tick;
 
 // USB
-#define BUFFER_SIZE 64
-uint8_t buffer[BUFFER_SIZE];
+#define BUFFER_SIZE 512
+char buffer[BUFFER_SIZE];
 uint32_t received = 0;
 uint32_t sent = 0;
+
+// Touch
+CST328_HandleTypeDef touch;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -91,6 +100,7 @@ static void MX_GPIO_Init(void);
 static void MX_ICACHE_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
+static void MX_I2C2_Init(void);
 /* USER CODE BEGIN PFP */
 void SystemClock_ConfigUSB(void);
 
@@ -102,18 +112,24 @@ int read_io(io pin) {
 	return HAL_GPIO_ReadPin(pin.port, pin.pin);
 }
 
-void print(uint8_t* text) {
+void print(char* text, ...) {
+	ux_device_stack_tasks_run();
+	char buffer[1024];
+	va_list args;
+	va_start(args, text);
+	vsnprintf(buffer, sizeof(buffer), text, args);
+	va_end(args);
 	if (clock_state == lwPWR) {
 		SystemClock_ConfigUSB();
 	}
-    int len = strlen((char*)text);
-    int offset = 0;
-    while (offset < len) {
-        int chunk_size = (len - offset > 8) ? 8 : (len - offset);
-        USBD_CDC_ACM_Transmit(text + offset, chunk_size, &sent);
-        offset += chunk_size;
-        ux_device_stack_tasks_run();
-    }
+	int len = strlen(buffer);
+	int offset = 0;
+	while (offset < len) {
+		int chunk_size = (len - offset > 8) ? 8 : (len - offset);
+		USBD_CDC_ACM_Transmit((uint8_t*)buffer + offset, chunk_size, &sent);
+		offset += chunk_size;
+		ux_device_stack_tasks_run();
+	}
 	if (clock_state == lwPWR) {
 		SystemClock_Config();
 	}
@@ -169,6 +185,7 @@ int main(void)
   MX_ICACHE_Init();
   MX_I2C1_Init();
   MX_USBX_Device_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
   INA226_setConfig(&hi2c1, INA226_ADDRESS, INA226_MODE_CONT_SHUNT_AND_BUS | INA226_VBUS_140uS | INA226_VBUS_140uS | INA226_AVG_1024);
   SystemClock_ConfigUSB();
@@ -177,25 +194,28 @@ int main(void)
   MX_USB_OTG_FS_PCD_Init();
 
   write_io(ESP_PWR, OFF);
-  write_io(ESP_UPDATE, OFF);
   write_io(LED, OFF);
   write_io(INA_PWR, ON);
+  write_io(TP1_RST, ON);
 
-  int start = HAL_GetTick();
+  CST328_InitHandle(&touch, &hi2c2, 240, 320);
+  touch.rst_port = GPIOE;
+  touch.rst_pin = GPIO_PIN_15;
+
+  uint32_t start = HAL_GetTick();
   while (HAL_GetTick() < start + 1500) {
-	  ux_device_stack_tasks_run();
-
 	  if (HAL_GetTick()%10 == 0 && last_printed_tick != HAL_GetTick()) {
 		  sprintf((char*)buffer, "Current: %d\n", current_ua());
-		  print((uint8_t*)buffer);
+		  print(buffer);
 		  last_printed_tick = HAL_GetTick();
 	  }
   }
 
-
-  SystemClock_Config();
-  clock_state = lwPWR;
+  //SystemClock_Config();
+  //clock_state = lwPWR;
   write_io(INA_PWR, ON);
+
+  last_update_tick = HAL_GetTick() - 300000;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -203,27 +223,23 @@ int main(void)
   while (1) {
 	  ux_device_stack_tasks_run();
 
-	  if (voltage_mv() < 3200) {
-		  // Enter standby
-		  write_io(TX, ON);						// Send off signal to ESP32
-		  write_io(LED, ON);					// Turn on LED
+	  if (HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_8) == GPIO_PIN_RESET && esp_on) {
+	      CST328_ReadData(&touch);
+		  if (touch.touchPoints[0].state) {
+			  print("X: %d Y: %d\n", touch.touchPoints[0].x, touch.touchPoints[0].y);
+		  }
 
-		  HAL_Delay(15000);
-
-		  write_io(ESP_PWR, OFF);
-		  write_io(LED, OFF);
-		  HAL_PWR_EnterSTANDBYMode();
 	  }
 
-	  if (HAL_GetTick()%1000 == 0 && last_printed_tick != HAL_GetTick()) {
-		  	  sprintf((char*)buffer, "Current: %d µA\n", current_ua());
-	  		  print((uint8_t*)buffer);
-		  	  sprintf((char*)buffer, "Voltage: %d mV\n", voltage_mv());
-	  		  print((uint8_t*)buffer);
-	  		  last_printed_tick = HAL_GetTick();
-	  	  }
+	  if (HAL_GetTick() >= last_printed_tick + 500) {
+		  print("Current: %d µA\n", current_ua());
+		  print("Voltage: %d mV\n", voltage_mv());
+		  print("Time Diff: %lums\n\n", HAL_GetTick() - last_printed_tick);
+		  last_printed_tick += 500;
+	  }
 	  // TURN OFF ESP32 - if ESP32 sends turn_off signal, turn it off.
 	  if(read_io(RX)) {
+		  print("rxing\n");
 		  HAL_Delay(10); 							// Pause to see if it was accidental
 		  if (read_io(RX)) {						// Re-check to see if it is still on
 			  if (HAL_GetTick() < esp_on_ticks + 100) {
@@ -236,7 +252,6 @@ int main(void)
 				  write_io(ESP_PWR, OFF);			// Shut it off
 				  write_io(LED, OFF);				// Turn off LED
 				  write_io(TX, OFF);				// Stop telling the ESP32 to shut off
-				  write_io(ESP_UPDATE, OFF);
 				  esp_on = false;					// Register the ESP32 is now off
 				  HAL_Delay(10);
 			  }
@@ -245,14 +260,19 @@ int main(void)
 
 	  // TURN ON/OFF ESP32
 	  if(!read_io(ON_OFF)) {
+		  print("ON/OFF\n");
 		  if (!esp_on) {
-			  write_io(ESP_UPDATE, OFF);
 			  write_io(ESP_PWR, ON);				// Turn on ESP32 Regulator
 			  write_io(TX, OFF);					// Stop telling the ESP32 to shut off
 			  HAL_Delay(wake_pause);				// Wait for ESP32 to initialize, avoid turning it back off
 			  esp_on = true;
 			  esp_on_ticks = HAL_GetTick();
 			  update = 0;
+			  for (uint16_t i = 0; i < 128; i++) {
+			      if (HAL_I2C_IsDeviceReady(&hi2c2, (i << 1), 3, 5) == HAL_OK) {
+			          print("Device found at 0x%02X\n", i);
+			      }
+			  }
 		  } else {
 			  // If ESP32 is on, send it the signal to turn off.
 			  write_io(TX, ON);						// Send off signal to ESP32
@@ -260,24 +280,40 @@ int main(void)
 		  }
 	  }
 
-	  if (HAL_GetTick() % 300000 < 3000 && !esp_on) {
+	  if (HAL_GetTick() > last_update_tick + 300000 && !esp_on) {
+		  print("LOGGING!\n");
 		  write_io(ESP_PWR, ON);					// Turn on ESP32 Regulator
-		  write_io(TX, OFF);						// Stop telling the ESP32 to shut off
-		  write_io(ESP_UPDATE, ON);
+		  write_io(TX, ON);							// Tell ESP32 to Track
 		  HAL_Delay(wake_pause);					// Wait for ESP32 to initialize, avoid turning it back off
 		  esp_on = true;
 		  esp_on_ticks = HAL_GetTick();
 		  update = 1;
+		  last_update_tick += 300000;
 	  }
 
 	  if (esp_on && esp_on_ticks + 80000 < HAL_GetTick() && update) {
-		  write_io(ESP_PWR, OFF);			// Shut it off
-		  write_io(LED, ON);				// Turn on LED
-		  write_io(ESP_UPDATE, ON);
+		  print("ESP Update Timeout. Rebooting...\n");
+		  write_io(ESP_PWR, OFF);				// Shut it off
+		  write_io(LED, ON);					// Turn on LED
+		  write_io(TX, ON);						// Tell ESP32 to Track
 		  HAL_Delay(1000);
 		  write_io(ESP_PWR, ON);
 		  HAL_Delay(wake_pause);
 		  esp_on_ticks = HAL_GetTick();
+	  }
+
+	  if (voltage_mv() < 3200) {
+  		  print("SHUTING DOWN: %d mV\n", voltage_mv());
+		  // Enter standby
+		  write_io(TX, ON);						// Send off signal to ESP32
+		  write_io(LED, ON);					// Turn on LED
+		  write_io(INA_PWR, OFF);
+
+		  HAL_Delay(15000);
+
+		  write_io(ESP_PWR, OFF);
+		  write_io(LED, OFF);
+		  HAL_PWR_EnterSTANDBYMode();
 	  }
     /* USER CODE END WHILE */
 
@@ -404,6 +440,54 @@ static void MX_I2C1_Init(void)
 }
 
 /**
+  * @brief I2C2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_I2C2_Init(void)
+{
+
+  /* USER CODE BEGIN I2C2_Init 0 */
+
+  /* USER CODE END I2C2_Init 0 */
+
+  /* USER CODE BEGIN I2C2_Init 1 */
+
+  /* USER CODE END I2C2_Init 1 */
+  hi2c2.Instance = I2C2;
+  hi2c2.Init.Timing = 0x00707CBB;
+  hi2c2.Init.OwnAddress1 = 0;
+  hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c2.Init.OwnAddress2 = 0;
+  hi2c2.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
+  hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Analogue filter
+  */
+  if (HAL_I2CEx_ConfigAnalogFilter(&hi2c2, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Digital filter
+  */
+  if (HAL_I2CEx_ConfigDigitalFilter(&hi2c2, 0) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN I2C2_Init 2 */
+
+  /* USER CODE END I2C2_Init 2 */
+
+}
+
+/**
   * @brief ICACHE Initialization Function
   * @param None
   * @retval None
@@ -496,9 +580,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOE, LED_Pin|TP1_RST_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(INA_PWR_GPIO_Port, INA_PWR_Pin, GPIO_PIN_SET);
@@ -509,8 +594,8 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(ESP_PWR_GPIO_Port, ESP_PWR_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : LED_Pin INA_PWR_Pin */
-  GPIO_InitStruct.Pin = LED_Pin|INA_PWR_Pin;
+  /*Configure GPIO pins : LED_Pin INA_PWR_Pin TP1_RST_Pin */
+  GPIO_InitStruct.Pin = LED_Pin|INA_PWR_Pin|TP1_RST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -535,6 +620,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : TP1_INT_Pin */
+  GPIO_InitStruct.Pin = TP1_INT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(TP1_INT_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : RX_Pin */
   GPIO_InitStruct.Pin = RX_Pin;

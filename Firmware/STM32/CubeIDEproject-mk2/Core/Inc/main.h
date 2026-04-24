@@ -67,8 +67,12 @@ void Error_Handler(void);
 #define ESP_PWR_GPIO_Port GPIOC
 #define IN1_Pin GPIO_PIN_2
 #define IN1_GPIO_Port GPIOB
+#define TP1_RST_Pin GPIO_PIN_15
+#define TP1_RST_GPIO_Port GPIOE
 #define IN2_Pin GPIO_PIN_12
 #define IN2_GPIO_Port GPIOB
+#define TP1_INT_Pin GPIO_PIN_8
+#define TP1_INT_GPIO_Port GPIOD
 #define TX_Pin GPIO_PIN_9
 #define TX_GPIO_Port GPIOA
 #define RX_Pin GPIO_PIN_10

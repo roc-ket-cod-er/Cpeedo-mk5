@@ -1,0 +1,5 @@
+../Core/Src/CSE_CST328.c:4:6:CST328_InitHandle	24	static
+../Core/Src/CSE_CST328.c:15:6:CST328_Begin	32	static
+../Core/Src/CSE_CST328.c:37:6:CST328_ReadData	48	static
+../Core/Src/CSE_CST328.c:80:6:CST328_IsTouched	16	static
+../Core/Src/CSE_CST328.c:85:9:CST328_SetRotation	16	static

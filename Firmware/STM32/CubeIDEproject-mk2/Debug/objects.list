@@ -1,3 +1,4 @@
+"./Core/Src/CSE_CST328.o"
 "./Core/Src/INA226.o"
 "./Core/Src/main.o"
 "./Core/Src/stm32u5xx_hal_msp.o"
