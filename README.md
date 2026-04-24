@@ -8,6 +8,8 @@ A _REALLY_ fancy bike speedo, designed in EasyEDA Pro and Fusion 360.
 
 ![WIN_20260330_20_20_43_Pro](https://github.com/user-attachments/assets/d3d685d1-3269-456b-b31e-6b3a4f122dad)
 
+[DEMO!](https://www.youtube.com/watch/DLDQR-w_GeQ)
+
 ## Key Features
 
 As the main goal is to measure speed, it obviously does so.
