@@ -85,7 +85,9 @@ In addition, I have become increasingly paranoid about my bike being stolen, thu
 
 ## How to use
 
-In this repository, you will find the files you need to print the case yourself, along side to get the PCB manufactured. The code too, shall come with time. Thus, it is as simple as loading the code onto the board, and you should be good. The LCDs have ribbon cables, making the connection really easy, whilst the E-INK required the normal jumper wires to be hooked up.
+In this repository, you will find the files you need to print the case yourself, along side to get the PCB manufactured. The code, too, is present (but not finished). Thus, it is as simple as loading the code onto the board, and you should be good. The LCDs have ribbon cables, making the connection really easy, whilst the E-INK required the normal jumper wires to be hooked up.
+
+Just put the screws into their holes, and behold! You shall have completed!
 
 ## Schematic
 
