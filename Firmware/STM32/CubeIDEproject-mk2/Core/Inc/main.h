@@ -61,8 +61,6 @@ void Error_Handler(void);
 #define LED_GPIO_Port GPIOE
 #define INA_PWR_Pin GPIO_PIN_3
 #define INA_PWR_GPIO_Port GPIOE
-#define ESP_SPEED_BOOT_Pin GPIO_PIN_1
-#define ESP_SPEED_BOOT_GPIO_Port GPIOA
 #define ESP_PWR_Pin GPIO_PIN_5
 #define ESP_PWR_GPIO_Port GPIOC
 #define IN1_Pin GPIO_PIN_2
