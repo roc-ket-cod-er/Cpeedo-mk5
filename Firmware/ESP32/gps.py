@@ -19,12 +19,12 @@ class GPS(object):
     def cmd(self, msg):
         self.uart.write(f"{msg}\r\n")
         
-    def update(self):
+    def update(self, chars=128):
         start = ticks_ms()
         try:
             a_bytes = self.uart.any()
             if a_bytes:
-                data = self.uart.read()
+                data = self.uart.read(chars)
                 for char in data:
                     self.gps.update(chr(char))
         except IndexError:
@@ -92,6 +92,7 @@ class GPS(object):
     def lock(self):
         long_lock = self.position[0][0] != 0
         lat_lock =  self.position[1][0] != 0
+        #print(long_lock, lat_lock,self.position[0][0],self.position[1][0])
         
         return True if lat_lock and long_lock else False
     

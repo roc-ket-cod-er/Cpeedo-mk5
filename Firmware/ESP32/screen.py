@@ -2,8 +2,8 @@ import st7789
 import tft_config
 import tft.tfont2 as big_font
 import tft.tfont1 as speed_font
-import vga2_bold_16x32 as font
-import vga1_8x16 as small_font
+import tft.normal as font
+import tft.small_font as small_font
 
 class TFT(object):
     def __init__(self):
@@ -33,3 +33,9 @@ class TFT(object):
     @property
     def sky(self):
         return 0x867E
+    @property
+    def red(self):
+        return st7789.RED
+    @property
+    def light_green(self):
+        return 0x07E0
