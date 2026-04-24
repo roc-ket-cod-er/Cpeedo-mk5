@@ -1,12 +1,14 @@
 # Cpeedo-mk5
 
->This project was funded by Hack Club's Blueprint program. Without their support, this project would not have been possible.
+>This project was funded by [Hack Club](https://hackclub.com/)'s Blueprint program. Hackclub is a registered, US based non-profit. Without their support, this project would not have been possible.
 
 A _REALLY_ fancy bike speedo, designed in EasyEDA Pro and Fusion 360.
 
 ![WIN_20260330_20_14_14_Pro](https://github.com/user-attachments/assets/ec0ffdfc-849b-4559-aedd-13fdfa4d90c0)
 
 ![WIN_20260330_20_20_43_Pro](https://github.com/user-attachments/assets/d3d685d1-3269-456b-b31e-6b3a4f122dad)
+
+[DEMO!](https://www.youtube.com/watch/DLDQR-w_GeQ)
 
 ## Key Features
 
@@ -83,7 +85,9 @@ In addition, I have become increasingly paranoid about my bike being stolen, thu
 
 ## How to use
 
-In this repository, you will find the files you need to print the case yourself, along side to get the PCB manufactured. The code too, shall come with time. Thus, it is as simple as loading the code onto the board, and you should be good. The LCDs have ribbon cables, making the connection really easy, whilst the E-INK required the normal jumper wires to be hooked up.
+In this repository, you will find the files you need to print the case yourself, along side to get the PCB manufactured. The code, too, is present (but not finished). Thus, it is as simple as loading the code onto the board, and you should be good. The LCDs have ribbon cables, making the connection really easy, whilst the E-INK required the normal jumper wires to be hooked up.
+
+Just put the screws into their holes, and behold! You shall have completed!
 
 ## Schematic
 
@@ -100,7 +104,7 @@ Here's the schematic in case you want to see it in PNG form!
 <img width="1190" height="845" alt="SCH_Schematic1_5-STM32_Sensors_2026-02-10" src="https://github.com/user-attachments/assets/3747364b-69ad-4392-b6ec-2bc7f2182c8a" />
 
 
-## BOM (PRICES MAY HAVE CHANGED: THIS IS FROM ~JAN 29)
+## BOM (PRICES MAY HAVE CHANGED: THIS IS FROM ~JAN 29 2026)
 
 |Item            |Cost (native)   |Cost (USD)|Link                                                                                                                                                        |NOTE                                                             |TOTAL: |
 |----------------|----------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------|-------|
