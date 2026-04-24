@@ -303,10 +303,19 @@ int main(void)
 	  }
 
 	  if (voltage_mv() < 3200) {
-  		  print("SHUTING DOWN: %d mV\n", voltage_mv());
+		  print("SHUTING DOWN: %d mV\n", voltage_mv());
+		  write_io(LED, ON);					// Turn on LED
+
+		  if (update) {
+			  write_io(ESP_PWR, OFF);		// Turn of ESP32
+			  write_io(TX, OFF);			// Stop Telling it to update/shut down
+			  HAL_Delay(100);				// Wait for it to turn off
+			  write_io(ESP_PWR, ON);		// Turn it on
+			  HAL_Delay(wake_pause+100);	// Pause for it to boot
+		  }
+
 		  // Enter standby
 		  write_io(TX, ON);						// Send off signal to ESP32
-		  write_io(LED, ON);					// Turn on LED
 		  write_io(INA_PWR, OFF);
 
 		  HAL_Delay(15000);
@@ -314,7 +323,7 @@ int main(void)
 		  write_io(ESP_PWR, OFF);
 		  write_io(LED, OFF);
 		  HAL_PWR_EnterSTANDBYMode();
-	  }
+		}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
