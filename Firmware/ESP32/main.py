@@ -13,7 +13,7 @@ import gc
 import uasyncio as asyncio
 
 # Check if boot was for tracking or for 
-track_pin = Pin(9, Pin.IN)
+track_pin = Pin(44, Pin.IN)
 TRACK = True if track_pin.value() else False
 
 # If running normally, import the screen driver
@@ -49,38 +49,85 @@ def track():
     try:
         freq(80_000_000)
         st = ticks_ms()
-        while ticks_ms() < 15_000 + st:
+        while ticks_ms() < 25_000 + st:
+            gps.update(4096)
             if gps.sats[0] > 5:
                 break
             print(gps.sats)
+            sleep_ms(20)
             
         cell.connect('io')
             
         while ticks_ms() < 40_000 + st:
+            sleep_ms(20)
+            gps.update(4096)
             if gps.lock:
+                gps.ban_updates()
                 break
         
         bat_list = cell.at('CBC').split(',')
         if gps.lock:
             gps.off()
-            cell.send_message(f"{gps.pos[1][0]}",  feed='latitude') # Send latitude
-            cell.send_message(f"{gps.pos[0][0]}", feed='longitude') # Send longitude
+            if gps.pos[1][0] != 0:
+                cell.send_message(f"{gps.pos[1][0]}",  feed='latitude') # Send latitude
+            else:
+                cell.send_message(f"lat, {gps.pos[1][0]}, {gps.pos[0][0]}, {"/".join(map(str, gps.sats))}", feed='debug')
+            if gps.pos[0][0] != 0:
+                cell.send_message(f"{gps.pos[0][0]}", feed='longitude') # Send longitude
+            else:
+                cell.send_message(f"long {gps.pos[1][0]}, {gps.pos[0][0]}, {"/".join(map(str, gps.sats))}", feed='debug')
+                
             cell.send_message(f"{"/".join(map(str, gps.sats))}s {round(gps.speed, 2)}km/h {gps.gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-5]}mV) waited: {(ticks_ms()-st)//1000}s", feed='other-info')
         else:
-            cell.send_message(f"NO LOCK: {"/".join(map(str, gps.sats))}s {gps.gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-5]}mV)", feed='other-info')
+            cell.send_message(f"NO LOCK: {"/".join(map(str, gps.sats))}s {gps.gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-5]}mV) waited: {(ticks_ms()-st)//1000}s", feed='other-info')
     except Exception as e:
         print(e)
         shut_down()
     except KeyboardInterrupt:
         return
     shut_down()
+    
+async def update_mqtt():
+    global request_cell
+    cell_free = False
+    # Connect to mqtt
+    await cell.aconnect('io')
+    
+    # Get Battery Percentage
+    btry = cell.btry
+    
+    # Updated screens
+    if btry[0] < 30:
+        tft.right.write(
+            tft.font,
+            f"{btry[0]:02d}%",
+            160, 8,
+            tft.red,
+            tft.black
+        )
+    tft.right.write(
+        tft.font,
+        f"{btry[0]:02d}%",
+        160, 8,
+        tft.light_green,
+        tft.black
+    )
+    
+    if gps.lock:
+        await cell.amsg(f'{gps.pos[1][0]} {gps.pos[1][1]} {gps.pos[0][0]} {gps.pos[0][1]}', "trips")
+    
+    await cell.aoff()
+    cell_free = True
+    
 # Main
-
 async def main():
+    global request_cell
     # Track if requested
     if TRACK:
         track()
         return
+    # Max out speed
+    freq(240_000_000)
     
     # Set up screens
     tft.fill_all(tft.black)
@@ -95,9 +142,10 @@ async def main():
     # Starting Variables
     old_speed = 978
     last_gc_collect = 0
-    last_cell_on = 0
-    btry = None
+    last_cell_on = ticks_ms()-35_000
     sat_string = ''
+    cell_free = True
+    request_cell = False
     
     # Clear GPS Buffer
     gps.uart.read()
@@ -107,19 +155,17 @@ async def main():
         # Update GPS Values
         gps.update()
         
-        # await to give the cell on/off functions a chance
+        # await to give the async functions a chance
         await asyncio.sleep_ms(1)
         
-        # check if cell chip is on
-        if cell.is_on and btry==None:
-            btry = cell.btry
-            print(btry)
-            asyncio.create_task(cell.aoff())
-            
+        # Check if it has been 45 seconds, and if so update the mqtt servers
         if last_cell_on + 45_000 < ticks_ms():
-            asyncio.create_task(cell.aon())
-            btry = None
-            last_cell_on = ticks_ms()
+            if cell_free: # Ensure cell isn't alread on
+                asyncio.create_task(update_mqtt())
+                last_cell_on = ticks_ms()
+                
+        # await to give the async functions a chance
+        await asyncio.sleep_ms(1)
         
         # Check if shutdown signal is given
         if not shut_off_pin.value() or shut_off_pin2.value():
@@ -127,8 +173,13 @@ async def main():
             
         # Collect GC if it is getting full
         if ticks_ms() > last_gc_collect + 120_000:
+            print("COLLECTING GARBAGE")
             gc.collect()
             last_gc_collect = ticks_ms()
+            
+            # await to give the async functions a chance
+            await asyncio.sleep_ms(1)
+            
         
         # Update screens if there is new GPS information
         if gps.new:
@@ -149,9 +200,12 @@ async def main():
                     tft.black
                 )
                 
+            # await to give the async functions a chance
+            await asyncio.sleep_ms(1)
+                
             # Add screen decimal and hdop
             if old_speed != gps.spd:
-                tft.left.text(
+                tft.left.write(
                     tft.font,
                     f"{round(gps.spd%1, 1)}"[2:],
                     210, 160,
@@ -159,36 +213,66 @@ async def main():
                     tft.black
                 )
                 old_speed = round(gps.spd, 1)
+                
+            # await to give the async functions a chance
+            await asyncio.sleep_ms(1)
             
-            time_stamp = ':'.join(map(str, gps.time))
-            tft.right.text(
+            time_stamp = [f"{gps.time[0]:02d}:{gps.time[1]:02d}", f":{gps.time[2]:0>4.1f}"]
+            tft.right.write(
                 tft.font,
-                time_stamp,
-                10, 10,
+                time_stamp[0],
+                10, 43,
+                tft.white,
+                tft.black
+            )
+            tft.right.write(
+                tft.small_font,
+                time_stamp[1],
+                134, 54,
                 tft.white,
                 tft.black
             )
             
-            if sat_string != f"{gps.sats[0]}/{gps.sats[1]}/{gps.hdop:0>.1f}":
-                tft.right.text(
-                    tft.font,
-                    f"{gps.sats[0]}/{gps.sats[1]}/{gps.hdop:0>.1f}",
-                    10, 48,
-                    tft.sky,
+            if sat_string != f"{gps.sats[0]:02d}/{gps.sats[1]:02d}/{gps.hdop:0>.1f}":
+                tft.right.write(
+                    tft.small_font,
+                    f"{gps.sats[0]:02d}/{gps.sats[1]:02d}/{gps.hdop:0>.1f}",
+                    10, 12,
+                    tft.white,
                     tft.black,
                 )
-                sat_string = f"{gps.sats[0]}/{gps.sats[1]}/{gps.hdop:0>.1f}"
+                sat_string = f"{gps.sats[0]:02d}/{gps.sats[1]:02d}/{gps.hdop:0>.1f}"
                 
-            # Re-allow updates
-            gps.allow_updates()
-            
-            print(ticks_ms()-s_t, gps.uart.any())
-            gps.update()
-            print(ticks_ms()-s_t)
+            # await to give the async functions a chance
+            await asyncio.sleep_ms(1)
             
             # Print info out
-            print(gps.time, gps.pos, gps.spd, gps.sats, gps.hdop, ticks_ms()-s_t, last_cell_on + 30_000 - ticks_ms())
+            print(gps.time, gps.pos, gps.spd, gps.sats, gps.hdop, ticks_ms()-s_t, last_cell_on + 45_000 - ticks_ms(), gps.uart.any())
+
+            # Re-allow updates
+            gps.allow_updates()
+
+        if s_t + 100 < ticks_ms():
+            time_stamp = [f"{gps.time[0]:02d}:{gps.time[1]:02d}", f":{gps.time[2]+0.1:0>4.1f}"]
+            tft.right.write(
+                tft.font,
+                time_stamp[0],
+                10, 43,
+                tft.white,
+                tft.black
+            )
+            tft.right.write(
+                tft.small_font,
+                time_stamp[1],
+                134, 54,
+                tft.white,
+                tft.black
+            )
+            s_t = ticks_ms() + 200
                 
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    finally:
+        cell.off()
