@@ -311,7 +311,7 @@ int main(void)
 			  write_io(TX, OFF);			// Stop Telling it to update/shut down
 			  HAL_Delay(100);				// Wait for it to turn off
 			  write_io(ESP_PWR, ON);		// Turn it on
-			  HAL_Delay(wake_pause+100);	// Pause for it to boot
+			  HAL_Delay(wake_pause+5000);	// Pause for it to boot
 		  }
 
 		  // Enter standby

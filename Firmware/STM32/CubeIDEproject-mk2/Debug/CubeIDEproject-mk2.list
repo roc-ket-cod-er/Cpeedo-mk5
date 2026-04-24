@@ -1935,8 +1935,8 @@ int main(void)
  800138c:	2201      	movs	r2, #1
  800138e:	e893 0003 	ldmia.w	r3, {r0, r1}
  8001392:	f7ff fc25 	bl	8000be0 <write_io>
-			  HAL_Delay(wake_pause+100);	// Pause for it to boot
- 8001396:	f240 404c 	movw	r0, #1100	@ 0x44c
+			  HAL_Delay(wake_pause+5000);	// Pause for it to boot
+ 8001396:	f241 7070 	movw	r0, #6000	@ 0x1770
  800139a:	f000 fe21 	bl	8001fe0 <HAL_Delay>
 		  }
 
