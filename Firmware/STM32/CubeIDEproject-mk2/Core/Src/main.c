@@ -60,6 +60,8 @@ typedef struct {
 // Others
 #define wake_pause  1000
 
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -71,6 +73,8 @@ typedef struct {
 
 I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
+
+SPI_HandleTypeDef hspi1;
 
 PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
@@ -91,6 +95,9 @@ uint32_t sent = 0;
 // Touch
 CST328_HandleTypeDef touch;
 
+// SPI
+uint8_t tx_buf[5] = "HELLO";
+uint8_t rx_buf[5];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -99,6 +106,7 @@ static void MX_GPIO_Init(void);
 static void MX_ICACHE_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
+static void MX_SPI1_Init(void);
 static void MX_I2C2_Init(void);
 /* USER CODE BEGIN PFP */
 void SystemClock_ConfigUSB(void);
@@ -184,6 +192,7 @@ int main(void)
   MX_ICACHE_Init();
   MX_I2C1_Init();
   MX_USBX_Device_Init();
+  MX_SPI1_Init();
   MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
   INA226_setConfig(&hi2c1, INA226_ADDRESS, INA226_MODE_CONT_SHUNT_AND_BUS | INA226_VBUS_140uS | INA226_VBUS_140uS | INA226_AVG_1024);
@@ -214,26 +223,40 @@ int main(void)
   //clock_state = lwPWR;
   write_io(INA_PWR, ON);
 
-  last_update_tick = HAL_GetTick() - 300000;
+  last_update_tick = HAL_GetTick() - 295000;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
 	  ux_device_stack_tasks_run();
-
-	  if (HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_8) == GPIO_PIN_RESET && esp_on) {
+	  if (esp_on && !update) {
+		HAL_SPI_TransmitReceive(
+			&hspi1,
+			tx_buf,
+			rx_buf,
+			5,
+			3
+		);
+	  }
+	  if (esp_on) {
 	      CST328_ReadData(&touch);
 		  if (touch.touchPoints[0].state) {
-			  print("X: %d Y: %d\n", touch.touchPoints[0].x, touch.touchPoints[0].y);
+			  print("X: %03d Y: %03d\n", touch.touchPoints[0].x, touch.touchPoints[0].y);
+			  tx_buf[0] = 255;
+			  tx_buf[1] = touch.touchPoints[0].x % 256;
+			  tx_buf[2] = touch.touchPoints[0].x-256 > 255;
+			  tx_buf[3] = touch.touchPoints[0].y % 256;
+			  tx_buf[4] = touch.touchPoints[0].y > 255;
+		  } else {
+			  tx_buf[0] = 0;
 		  }
 
 	  }
 
 	  if (HAL_GetTick() >= last_printed_tick + 500) {
-		  print("Current: %d µA\n", current_ua());
-		  print("Voltage: %d mV\n", voltage_mv());
-		  print("Time Diff: %lums\n\n", HAL_GetTick() - last_printed_tick);
+		  print("Current: %d µA\nVoltage: %d mV\nTime Diff: %lums\n\n", current_ua(), voltage_mv(), HAL_GetTick() - last_printed_tick);
 		  last_printed_tick += 500;
 	  }
 	  // TURN OFF ESP32 - if ESP32 sends turn_off signal, turn it off.
@@ -279,15 +302,19 @@ int main(void)
 		  }
 	  }
 
-	  if (HAL_GetTick() > last_update_tick + 300000 && !esp_on) {
-		  print("LOGGING!\n");
-		  write_io(ESP_PWR, ON);					// Turn on ESP32 Regulator
-		  write_io(TX, ON);							// Tell ESP32 to Track
-		  HAL_Delay(wake_pause);					// Wait for ESP32 to initialize, avoid turning it back off
-		  esp_on = true;
-		  esp_on_ticks = HAL_GetTick();
-		  update = 1;
-		  last_update_tick += 300000;
+	  if (HAL_GetTick() > last_update_tick + 300000) {
+		  if (!esp_on) {
+			  print("LOGGING!\n");
+			  write_io(ESP_PWR, ON);					// Turn on ESP32 Regulator
+			  write_io(TX, ON);							// Tell ESP32 to Track
+			  HAL_Delay(wake_pause);					// Wait for ESP32 to initialize, avoid turning it back off
+			  esp_on = true;
+			  esp_on_ticks = HAL_GetTick();
+			  update = 1;
+			  last_update_tick += 300000;
+		  } else {
+			  last_update_tick += 300000;
+		  }
 	  }
 
 	  if (esp_on && esp_on_ticks + 80000 < HAL_GetTick() && update) {
@@ -521,6 +548,62 @@ static void MX_ICACHE_Init(void)
 }
 
 /**
+  * @brief SPI1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI1_Init(void)
+{
+
+  /* USER CODE BEGIN SPI1_Init 0 */
+
+  /* USER CODE END SPI1_Init 0 */
+
+  SPI_AutonomousModeConfTypeDef HAL_SPI_AutonomousMode_Cfg_Struct = {0};
+
+  /* USER CODE BEGIN SPI1_Init 1 */
+
+  /* USER CODE END SPI1_Init 1 */
+  /* SPI1 parameter configuration*/
+  hspi1.Instance = SPI1;
+  hspi1.Init.Mode = SPI_MODE_SLAVE;
+  hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi1.Init.NSS = SPI_NSS_SOFT;
+  hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi1.Init.CRCPolynomial = 0x7;
+  hspi1.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
+  hspi1.Init.NSSPolarity = SPI_NSS_POLARITY_LOW;
+  hspi1.Init.FifoThreshold = SPI_FIFO_THRESHOLD_01DATA;
+  hspi1.Init.MasterSSIdleness = SPI_MASTER_SS_IDLENESS_00CYCLE;
+  hspi1.Init.MasterInterDataIdleness = SPI_MASTER_INTERDATA_IDLENESS_00CYCLE;
+  hspi1.Init.MasterReceiverAutoSusp = SPI_MASTER_RX_AUTOSUSP_DISABLE;
+  hspi1.Init.MasterKeepIOState = SPI_MASTER_KEEP_IO_STATE_DISABLE;
+  hspi1.Init.IOSwap = SPI_IO_SWAP_DISABLE;
+  hspi1.Init.ReadyMasterManagement = SPI_RDY_MASTER_MANAGEMENT_INTERNALLY;
+  hspi1.Init.ReadyPolarity = SPI_RDY_POLARITY_HIGH;
+  if (HAL_SPI_Init(&hspi1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  HAL_SPI_AutonomousMode_Cfg_Struct.TriggerState = SPI_AUTO_MODE_DISABLE;
+  HAL_SPI_AutonomousMode_Cfg_Struct.TriggerSelection = SPI_GRP1_GPDMA_CH0_TCF_TRG;
+  HAL_SPI_AutonomousMode_Cfg_Struct.TriggerPolarity = SPI_TRIG_POLARITY_RISING;
+  if (HAL_SPIEx_SetConfigAutonomousMode(&hspi1, &HAL_SPI_AutonomousMode_Cfg_Struct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI1_Init 2 */
+
+  /* USER CODE END SPI1_Init 2 */
+
+}
+
+/**
   * @brief USB_OTG_FS Initialization Function
   * @param None
   * @retval None
@@ -578,10 +661,10 @@ static void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, LED_Pin|TP1_RST_Pin, GPIO_PIN_RESET);
@@ -601,6 +684,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : SPI1_CS_Pin */
+  GPIO_InitStruct.Pin = SPI1_CS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(SPI1_CS_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : ESP_PWR_Pin */
   GPIO_InitStruct.Pin = ESP_PWR_Pin;
