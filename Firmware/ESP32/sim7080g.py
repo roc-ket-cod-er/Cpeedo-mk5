@@ -136,7 +136,7 @@ class Cell(object):
     def on(self, shush=False, wait_for_boot=True):
         return self.turn_on(shush, wait_for_boot)
     
-    async def aon(self, shush=False, wait_for_boot=False):
+    async def aon(self, shush=False, wait_for_boot=True):
         if self.is_on:
             if not shush:
                 print("ERROR: already on")
@@ -144,6 +144,13 @@ class Cell(object):
         self.pwrkey.value(1)
         await asyncio.sleep_ms(1500)
         self.pwrkey.value(0)
+        
+        if wait_for_boot:
+            i = 0
+            while i < 2000:
+                if await self.aat("AT", wait=0.1, include='') == "AT\r\r\nOK\r\n":
+                    break
+                i += 1
 
     async def aoff(self, shush=False, hold=False):
         if self.is_off:
