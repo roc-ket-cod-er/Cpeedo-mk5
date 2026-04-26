@@ -9,18 +9,20 @@ stm_com.off()
 from sim7080g import Cell
 from gps import GPS
 from time import sleep_ms, ticks_ms
-import gc
-import uasyncio as asyncio
 
 # Check if boot was for tracking or for 
 track_pin = Pin(44, Pin.IN)
 TRACK = True if track_pin.value() else False
 
-# If running normally, import the screen driver
+# If running normally, import other things and initialize screen
 if not TRACK:
     from screen import TFT
+    import gc
+    import uasyncio as asyncio
+    
+    tft = TFT()
 
-# Simpler swap-ins to help simplify typing
+# Simple swap-ins to help simplify typing
 ms = "ms"
 
 # initialize objects
@@ -31,11 +33,8 @@ gps = GPS()
 shut_off_pin = Pin(0, Pin.IN, Pin.PULL_UP)
 shut_off_pin2= Pin(44,Pin.IN, Pin.PULL_DOWN)
 
-# initialize slow objects if not tracking
-if not TRACK:
-    tft = TFT()
 
-# Function Defines
+# -------------- Function Defines ---------------- #
 
 # To shut everything down
 def shut_down():
@@ -44,7 +43,43 @@ def shut_down():
     else:
         cell.off()
     stm_com.on()
+    
+    
+async def update_mqtt():
+    global request_cell
+    cell_free = False
+    # Connect to mqtt
+    await cell.aon()
+    
+    # Get Battery Percentage
+    btry = cell.btry
+    
+    # Updated screens
+    if btry[0] < 30:
+        tft.right.write(
+            tft.font,
+            f"{btry[0]:02d}%",
+            160, 8,
+            tft.red,
+            tft.black
+        )
+    tft.right.write(
+        tft.font,
+        f"{btry[0]:02d}%",
+        160, 8,
+        tft.light_green,
+        tft.black
+    )
+    
+    await cell.aconnect('io')
+    
+    if gps.lock:
+        await cell.amsg(f'{gps.pos[1][0]} {gps.pos[1][1]} {gps.pos[0][0]} {gps.pos[0][1]}', "trips")
+    
+    await cell.aoff()
+    cell_free = True
 
+# ---------------- TRACKING CODE STARTS HERE ----------------- #
 def track():
     try:
         freq(80_000_000)
@@ -87,39 +122,7 @@ def track():
         return
     shut_down()
     
-async def update_mqtt():
-    global request_cell
-    cell_free = False
-    # Connect to mqtt
-    await cell.aconnect('io')
-    
-    # Get Battery Percentage
-    btry = cell.btry
-    
-    # Updated screens
-    if btry[0] < 30:
-        tft.right.write(
-            tft.font,
-            f"{btry[0]:02d}%",
-            160, 8,
-            tft.red,
-            tft.black
-        )
-    tft.right.write(
-        tft.font,
-        f"{btry[0]:02d}%",
-        160, 8,
-        tft.light_green,
-        tft.black
-    )
-    
-    if gps.lock:
-        await cell.amsg(f'{gps.pos[1][0]} {gps.pos[1][1]} {gps.pos[0][0]} {gps.pos[0][1]}', "trips")
-    
-    await cell.aoff()
-    cell_free = True
-    
-# Main
+# -------------------- MAIN LOOP STARTS HERE -------------------- #
 async def main():
     global request_cell
     # Track if requested
@@ -142,7 +145,7 @@ async def main():
     # Starting Variables
     old_speed = 978
     last_gc_collect = 0
-    last_cell_on = ticks_ms()-35_000
+    last_cell_on = ticks_ms()-42_000
     sat_string = ''
     cell_free = True
     request_cell = False
@@ -160,9 +163,9 @@ async def main():
         
         # Check if it has been 45 seconds, and if so update the mqtt servers
         if last_cell_on + 45_000 < ticks_ms():
+            last_cell_on = ticks_ms()
             if cell_free: # Ensure cell isn't alread on
                 asyncio.create_task(update_mqtt())
-                last_cell_on = ticks_ms()
                 
         # await to give the async functions a chance
         await asyncio.sleep_ms(1)
