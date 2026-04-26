@@ -1,5 +1,10 @@
 key = "YOUR ADAFRUIT IO KEY"
 user_name = "YOUR ADAFRUIT IO USER NAME"
 client_id = "A NAME FOR YOUR DEVICE"
-wifi_ssid = None     #Insert wifi ssid to save data when possible
-wifi_password = None #Insert wifi password to save data when possible
+
+# If you have wifi, fill out the following. If not, delete the dictionary.
+
+wifi_info = {
+    "YOUR SSID": "YOUR PASSWORD",
+    "YOUR 2nd SSID": "ITS PASSOWRD"
+}

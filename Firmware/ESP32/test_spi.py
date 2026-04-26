@@ -28,7 +28,7 @@ while True:
 
     if value[2] == 0 and (value[0] == 255 or value[0] == 0) and value[4] < 2 and value[1] != 0 and value[3] != 0:
         if value != lv:
-            print("Raw byte:", value, f"    \tx: {value[1]:03d} y: {value[3] + 256*value[4]:03d} tstamp: {ticks_ms()%10000}")
+            print("Raw bytes:", value, f"    \tx: {value[1]:03d} y: {value[3] + 256*value[4]:03d} tstamp: {ticks_ms()%10000}")
             lv = value
     elif value == [0,0,0,0,0]:
         pass

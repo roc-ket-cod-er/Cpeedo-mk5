@@ -1,5 +1,6 @@
 # Important Imports
 from machine import Pin, UART, freq
+import uasyncio as asyncio
 
 # Prevent Automatic Shutdown / Comms
 stm_com = Pin(43, Pin.OUT)
@@ -10,6 +11,8 @@ from sim7080g import Cell
 from gps import GPS
 from time import sleep_ms, ticks_ms
 
+from wifi import Wifi
+
 # Check if boot was for tracking or for 
 track_pin = Pin(44, Pin.IN)
 TRACK = True if track_pin.value() else False
@@ -18,7 +21,6 @@ TRACK = True if track_pin.value() else False
 if not TRACK:
     from screen import TFT
     import gc
-    import uasyncio as asyncio
     
     tft = TFT()
 

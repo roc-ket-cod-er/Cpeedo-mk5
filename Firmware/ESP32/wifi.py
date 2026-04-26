@@ -1,28 +1,15 @@
 from time import ticks_ms, sleep_ms
-from network import WLAN, STA_IF,
+from network import WLAN, STA_IF, STAT_CONNECTING, STAT_GOT_IP 
 import _thread
 import uasyncio as asyncio
 
-try:
-    from secrets import wifi_ssid, wifi_password
-    no_info=False
-except ImportError:
-    no_info=True
-
 class Wifi(object):
     def __init__(self, ssid=None, password=None, on=False):
-        if no_info:
-            if ssid != None:
-                self.ssid = ssid
-            else:
-                raise ValueError("No SSID Provided")
-            if password != None:
-                self.password = password
-            else:
-                raise ValueError("No Password Provided")
-        else:
-            self.ssid = wifi_ssid
-            self.password = wifi_password
+        try:
+            from secrets import wifi_info
+            self.no_info=False
+        except ImportError as e:
+            self.no_info=True
             
         self.wlan = WLAN(STA_IF)
         self.wlan.active(on)
@@ -32,11 +19,24 @@ class Wifi(object):
         self._scan_thread = _thread.start_new_thread(self._scan, ())
         self._scan_results = None
         
+        self.wifi_info = wifi_info
+        self.connected_to = None
+        
+        if self.no_info:
+            if ssid != None:
+                self.ssid = ssid
+            else:
+                raise ValueError("No SSID Provided")
+            if password != None:
+                self.password = password
+            else:
+                raise ValueError("No Password Provided")
         
     def on(self):
         self.wlan.active(True)
     def off(self):
         self.wlan.active(False)
+        self.connected_to=None
     
     def _scan(self):
         while True:
@@ -67,17 +67,57 @@ class Wifi(object):
         
         return self._scan_results
     
+    async def _connect(self, ssid, password):
+        self.wlan.connect(ssid, password)
+        await asyncio.sleep_ms(200)
+        while self.wlan.status() == STAT_CONNECTING:
+            await asyncio.sleep_ms(300)
+                  
+        if self.wlan.isconnected():
+            self.connected_to = ssid
+            return True
+        else:
+            print(WLAN.status)
+            return False
+    
+    async def connect(self, force=False):
+        if self.wlan.isconnected() and not force:
+            return True
+        elif force:
+            self.off()
+            await asyncio.sleep_ms(50)
+            self.on()
+            
+        if self.no_info:
+            return await self._connect(self.ssid, self.password)
+        else:
+            visible_networks = []
+            info = await self.scan()
+            
+            for network in info:
+                visible_networks.append(network[0].decode())
+                
+            print(visible_networks)
+            for network in self.wifi_info:
+                if network in visible_networks:
+                    if await self._connect(network, self.wifi_info[network]):
+                        return True
+            return False
+    
+    def force_new_info(self, ssid, password):
+        self.no_info = True
+        self.ssid = ssid
+        self.password = password
+    
 async def test():
     wifi = Wifi()
-    hold = await wifi.scan()
-    for item in hold:
-        print(item)
+    print(f"\n\n{await wifi.connect(force=True)}")
+    print(wifi.connected_to)
+    wifi.off()
     
 
 if __name__ == '__main__':
     asyncio.run(test())
-    
-    
     
     
     
