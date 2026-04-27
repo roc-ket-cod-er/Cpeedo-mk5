@@ -20,7 +20,7 @@ class Wifi(object):
         self._scan_results = None
         
         self.wifi_info = wifi_info
-        self.connected_to = None
+        self._connected_to = None
         
         if self.no_info:
             if ssid != None:
@@ -36,7 +36,7 @@ class Wifi(object):
         self.wlan.active(True)
     def off(self):
         self.wlan.active(False)
-        self.connected_to=None
+        self._connected_to=None
     
     def _scan(self):
         while True:
@@ -74,7 +74,7 @@ class Wifi(object):
             await asyncio.sleep_ms(300)
                   
         if self.wlan.isconnected():
-            self.connected_to = ssid
+            self._connected_to = ssid
             return True
         else:
             print(WLAN.status)
@@ -108,6 +108,13 @@ class Wifi(object):
         self.no_info = True
         self.ssid = ssid
         self.password = password
+        
+    @property
+    def is_connected(self):
+        return self.wlan.isconnected()
+    @property
+    def connected_to(self):
+        return self._connected_to if self.wlan.isconnected() else None
     
 async def test():
     wifi = Wifi()
