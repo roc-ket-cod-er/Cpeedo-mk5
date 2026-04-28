@@ -120,8 +120,9 @@ async def track():
                 sleep_ms(6_000)
                 wifi.pub_long(f"{gps.pos[0][0]}")
                 sleep_ms(6_000)
-                    
+                
                 bat_list = cell.at('CBC').split(',')
+                cell.send_message(f"{"/".join(map(str, gps.sats))}s {round(gps.speed, 2)}km/h {gps.gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-5]}mV) waited: {(ticks_ms()-st)//1000}s", feed='other-info')
             else:
                 bat_list = cell.at('CBC').split(',')
                 if gps.pos[1][0] != 0:
