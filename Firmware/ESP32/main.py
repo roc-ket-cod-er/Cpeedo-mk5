@@ -6,6 +6,9 @@ import uasyncio as asyncio
 stm_com = Pin(43, Pin.OUT)
 stm_com.off()
 
+race_pin = Pin(3, Pin.IN, Pin.PULL_UP)
+if not race_pin.value():
+    import race
 # Imports
 from sim7080g import Cell
 from gps import GPS
