@@ -5,7 +5,6 @@ import uasyncio as asyncio
 
 class Cell(object):
     def __init__(self, pwrkey=48, pwr_detect=15, init_uart=True):
-        self.uart_init = False
         self.pwrkey = Pin(pwrkey, Pin.OUT)
         self.pwrkey.value(0)
         self.pwr_detect = Pin(pwr_detect, Pin.IN)
