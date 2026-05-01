@@ -1,4 +1,5 @@
 from time import ticks_ms, sleep_ms
+from umqtt.robust import MQTTClient
 from network import WLAN, STA_IF, STAT_CONNECTING, STAT_GOT_IP 
 import _thread
 import uasyncio as asyncio
@@ -6,7 +7,7 @@ import uasyncio as asyncio
 class Wifi(object):
     def __init__(self, ssid=None, password=None, on=False):
         try:
-            from secrets import wifi_info
+            from secrets import wifi_info, client_id, key, user_name
             self.no_info=False
         except ImportError as e:
             self.no_info=True
@@ -20,7 +21,18 @@ class Wifi(object):
         self._scan_results = None
         
         self.wifi_info = wifi_info
-        self._connected_to = None
+        self.connected_to = None
+        
+        self.latitude = '{:s}/feeds/{:s}'.format(user_name, 'latitude')
+        self.longitude = '{:s}/feeds/{:s}'.format(user_name, 'longitude')
+        if not self.no_info:
+            self.client = MQTTClient(client_id=client_id+'-wifi', 
+                        server='io.adafruit.com', 
+                        user=user_name, 
+                        password=key,
+                        ssl=False)
+        else:
+            self.client = None
         
         if self.no_info:
             if ssid != None:
@@ -36,7 +48,7 @@ class Wifi(object):
         self.wlan.active(True)
     def off(self):
         self.wlan.active(False)
-        self._connected_to=None
+        self.connected_to=None
     
     def _scan(self):
         while True:
@@ -74,7 +86,7 @@ class Wifi(object):
             await asyncio.sleep_ms(300)
                   
         if self.wlan.isconnected():
-            self._connected_to = ssid
+            self.connected_to = ssid
             return True
         else:
             print(WLAN.status)
@@ -109,19 +121,42 @@ class Wifi(object):
         self.ssid = ssid
         self.password = password
         
-    @property
-    def is_connected(self):
-        return self.wlan.isconnected()
-    @property
-    def connected_to(self):
-        return self._connected_to if self.wlan.isconnected() else None
+    def connect_to_mqtt(self):
+        if self.client == None:
+            print("Failed to connect: No secrets file detected")
+            return "No secrets file detected"
+        try:
+            self.client.connect()
+        except Exception as e:
+            print(f"Failed to connect: {type(e).__name__} {e}")
+    
+    def pub_lat(self, msg):
+        self.client.publish(self.latitude,    
+                   msg,
+                   qos=0)
+        
+    def pub_long(self, msg):
+        self.client.publish(self.longitude,    
+                   msg,
+                   qos=0)  
+        
     
 async def test():
     wifi = Wifi()
-    print(f"\n\n{await wifi.connect(force=True)}")
+    wifi.off()
+    sleep_ms(50)
+    wifi.on()
+    print(f"\n\n{await wifi.connect()}")
     print(wifi.connected_to)
+    wifi.connect_to_mqtt()
+    wifi.pub_lat("43.50528")
+    wifi.pub_long("80.52275")
+    sleep_ms(10_000)
     wifi.off()
     
 
 if __name__ == '__main__':
-    asyncio.run(test())    
+    asyncio.run(test())
+    
+    
+    
