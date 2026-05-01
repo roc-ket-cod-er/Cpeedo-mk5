@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Speed Gauge</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #0f172a;
+        font-family: Arial, sans-serif;
+        color: white;
+    }
+
+    .container {
+        text-align: center;
+    }
+
+    .arc {
+        width: 320px;
+        height: 320px;
+        border: 18px solid #334155;
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .gauge {
+        width: 320px;
+        height: 170px;
+        position: relative;
+        overflow: hidden;
+        margin: 0 auto;
+    }
+    
+    .center-dot {
+        width: 18px;
+        height: 18px;
+        background: white;
+        border-radius: 50%;
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translate(-50%, 50%);
+        z-index: 10;
+    }
+    
+    .needle {
+        width: 4px;
+        height: 130px;
+        background: white;
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform-origin: bottom center;
+        transform: translateX(-50%) rotate(-90deg);
+        border-radius: 4px;
+        transition: transform 1s ease;
+        z-index: 1;
+    }
+
+    .value {
+        margin-top: 20px;
+        font-size: 32px;
+        font-weight: bold;
+    }
+
+    .label {
+        margin-top: 8px;
+        color: #94a3b8;
+        font-size: 14px;
+        z-index: 2;
+    }
+
+    .status {
+        margin-top: 14px;
+        font-size: 13px;
+        color: #94a3b8;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="gauge">
+        <div class="arc"></div>
+        <div class="needle" id="needle"></div>
+        <div class="center-dot"></div>
+    </div>
+
+    <div class="value" id="value">-- km/h</div>
+    <div class="label">Speed (0–40 km/h)</div>
+    <div class="status" id="status">Loading...</div>
+</div>
+
+<script>
+let i = 0;
+const URL = "https://io.adafruit.com/api/v2/space_coder/feeds/ev-run/data?limit=1";
+const MAX_SPEED = 40;
+
+function updateGauge(speed, bat) {
+    speed = Math.max(0, Math.min(MAX_SPEED, speed));
+
+    // Map 0→40 to -90deg → +90deg
+    const angle = -93 + (speed / MAX_SPEED) * 186;
+
+    document.getElementById("needle").style.transform =
+        `translateX(-50%) rotate(${angle}deg)`;
+
+    document.getElementById("value").textContent =
+        `${speed.toFixed(1)} km/h ${bat}`;
+}
+
+async function fetchData() {
+    try {
+        i+=0.5;
+        const res = await fetch(URL);
+        const data = await res.json();
+
+        if (!data || !data.length) return;
+
+        const latest = data[0];
+
+        const parts = latest.value.replace(/\r\n/g, "\n").split(" ");
+        const speedText = parts[1] || "0km/h";
+        const batText = parts[0] || "";
+        const update_date = new Date(latest.created_at);
+        const speed = parseFloat(speedText.replace("km/h", "")) || 0;
+
+        const timediff = Math.floor(Math.max((new Date() - update_date-500)/1000, 0));
+
+        updateGauge(speed, batText);
+
+        if (timediff < 60) {
+            document.getElementById("status").textContent =
+                "Last checked: " + new Date().toLocaleTimeString('en-US', { hour12: true }) + " (Data from " + String(timediff) + "s ago)";
+        } else if (timediff < 3600) {
+            document.getElementById("status").textContent =
+                "Last checked: " + new Date().toLocaleTimeString('en-US', { hour12: true }) + " (Data from " + String(Math.floor(timediff/60)) + "m " + String(timediff%60).padStart(2, '0') + "s ago)";
+        } else if (timediff < 86400) {
+            document.getElementById("status").textContent =
+                "Last checked: " + new Date().toLocaleTimeString('en-US', { hour12: true }) + " (Data from " + String(Math.floor(timediff/3600)) + "h " + String(Math.floor(timediff/60)).padStart(2, '0') + "m " + String(timediff%60).padStart(2, '0') + "s ago)";
+        } else {
+            document.getElementById("status").textContent =
+                "Last checked: " + new Date().toLocaleTimeString('en-US', { hour12: true }) + " (Data from over a day ago)";
+        }
+    
+    } catch (err) {
+        document.getElementById("status").textContent =
+            "Error fetching data";
+        console.error(err);
+    }
+}
+
+fetchData();
+setInterval(fetchData, 500);
+</script>
+
+</body>
+</html>
