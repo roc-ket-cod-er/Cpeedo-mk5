@@ -1,6 +1,5 @@
 # Important Imports
 from machine import Pin, UART, freq
-import uasyncio as asyncio
 
 # Prevent Automatic Shutdown / Comms
 stm_com = Pin(43, Pin.OUT)
@@ -13,6 +12,7 @@ if not race_pin.value():
 from sim7080g import Cell
 from gps import GPS
 from time import sleep_ms, ticks_ms
+import uasyncio as asyncio
 
 from wifi import Wifi
 
@@ -101,7 +101,7 @@ async def track():
             w_connect=True
             wifi.on()
             cell.connect('io')
-            if await wifi.connect():      
+            if await wifi.aconnect():      
                 wifi.connect_to_mqtt()
         except Exception as e:
             print(e)

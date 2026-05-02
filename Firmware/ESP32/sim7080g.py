@@ -361,3 +361,10 @@ class Cell(object):
             return btry, btryV
         except (IndexError, ValueError, AttributeError):
             return [-1, -1]
+        
+    @property
+    def version(self):
+        return "v1.0.0"
+    @property
+    def _version(self):
+        return [1, 0, 0]

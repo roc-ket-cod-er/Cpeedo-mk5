@@ -20,11 +20,11 @@ class Wifi(object):
         self._scan_thread = _thread.start_new_thread(self._scan, ())
         self._scan_results = None
         
+        self.is_connected_to_mqtt = True
+        
         self.wifi_info = wifi_info
         self.connected_to = None
         
-        self.latitude = '{:s}/feeds/{:s}'.format(user_name, 'latitude')
-        self.longitude = '{:s}/feeds/{:s}'.format(user_name, 'longitude')
         if not self.no_info:
             self.client = MQTTClient(client_id=client_id+'-wifi', 
                         server='io.adafruit.com', 
@@ -33,7 +33,7 @@ class Wifi(object):
                         ssl=False)
         else:
             self.client = None
-        
+        self.username = user_name        
         if self.no_info:
             if ssid != None:
                 self.ssid = ssid
@@ -49,6 +49,13 @@ class Wifi(object):
     def off(self):
         self.wlan.active(False)
         self.connected_to=None
+        
+    @property
+    def is_on(self):
+        return self.wlan.active()
+    @property
+    def is_connected_to_wifi(self):
+        return self.wlan.isconnected()
     
     def _scan(self):
         while True:
@@ -92,7 +99,7 @@ class Wifi(object):
             print(WLAN.status)
             return False
     
-    async def connect(self, force=False):
+    async def aconnect(self, force=False):
         if self.wlan.isconnected() and not force:
             return True
         elif force:
@@ -109,7 +116,7 @@ class Wifi(object):
             for network in info:
                 visible_networks.append(network[0].decode())
                 
-            print(visible_networks)
+            # print(visible_networks)
             for network in self.wifi_info:
                 if network in visible_networks:
                     if await self._connect(network, self.wifi_info[network]):
@@ -127,20 +134,35 @@ class Wifi(object):
             return "No secrets file detected"
         try:
             self.client.connect()
+            self.is_connected_to_mqtt = True
+            return True
         except Exception as e:
             print(f"Failed to connect: {type(e).__name__} {e}")
+        return False
+    
+    def send_message(self, msg, feed, qos=0):
+        self.client.publish(
+            '{:s}/feeds/{:s}'.format(self.username, feed),
+            msg,
+            qos=qos
+        )
+    
+    def msg(self, msg, feed, qos=0):
+        self.send_message(msg, feed, qos)
     
     def pub_lat(self, msg):
-        self.client.publish(self.latitude,    
-                   msg,
-                   qos=0)
+        self.msg(msg, 'latitude')
         
     def pub_long(self, msg):
-        self.client.publish(self.longitude,    
-                   msg,
-                   qos=0)  
+        self.msg(msg, 'longitude') 
         
-    
+    @property
+    def version(self):
+        return "v1.0.0"
+    @property
+    def _version(self):
+        return [1, 0, 0]
+
 async def test():
     wifi = Wifi()
     wifi.off()

@@ -1,0 +1,100 @@
+import uasyncio as asyncio
+from time import sleep, ticks_ms
+
+class MQTT(object):
+    def __init__(self, cell=None, wifi=None):
+        if cell != None:
+            try:
+                if cell._version[0] == 1:
+                    self.cell = cell
+                    self.cell_setup = True
+                else:
+                    raise RuntimeError("Incorrect cell object version.")
+            except AttributeError:
+                raise RuntimeError("Incorrect wifi object given. Required module is availible at 'https://github.com/roc-ket-cod-er/Cpeedo-mk5/blob/main/Firmware/ESP32/sim7080g.py'")
+
+        else:
+            self.cell = None
+            self.cell_setup = False
+            
+        if wifi != None:
+            try:
+                if wifi._version[0] == 1:
+                    self.wifi = wifi
+                    self.wifi_setup = True
+                else:
+                    raise RuntimeError(f"Incorrect wifi object version: {wifi._version[0]}")
+            except AttributeError:
+                raise RuntimeError("Incorrect wifi object given. Required module is availible at 'https://github.com/roc-ket-cod-er/Cpeedo-mk5/blob/main/Firmware/ESP32/wifi.py'")
+        else:
+            self.wifi = None
+            self.wifi_setup = False
+            
+        if self.wifi_setup:
+            pass
+        elif self.cell_setup:
+            pass
+        else:
+            raise ValueError("No wifi object or cell object given.")
+        
+    async def _wifimsg(self, msg, feed, qos):
+        if self.wifi_setup:
+            if self.wifi.is_on:
+                started = 'on'
+            else:
+                started = 'off'
+                self.wifi.on()
+            if not self.wifi.is_connected_to_wifi:
+                await self.wifi.aconnect()
+            try:
+                print(msg)
+                self.wifi.msg(msg, feed, qos)
+            except AttributeError:
+                self.wifi.connect_to_mqtt()
+                self.wifi.msg(msg, feed, qos)
+            await asyncio.sleep_ms(1500)
+            
+            if started == 'off':
+                self.wifi.off()
+            return True
+        
+    async def _cellmsg(self, msg, feed):
+        if not self.cell_setup:
+            return False
+        if self.cell.is_off:
+            await self.cell.aon()
+            started='off'
+        else:
+            started='on'
+        await self.cell.aconnect('io')
+        await self.cell.amsg(msg, feed)
+        return True
+        
+    async def amsg(self, msg, feed, prefer="wifi", qos=0):
+        if prefer.lower() == "wifi":
+            if await self._wifimsg(msg, feed, qos):
+                return True
+            return await self._cellmsg(msg, feed)
+        else:
+            if await self._cellmsg(msg, feed):
+                return True
+            return await self._wifimsg(msg, feed, qos)
+            
+async def main():
+    from wifi import Wifi
+    from sim7080g import Cell
+    wifi=Wifi()
+    wifi.on()
+    cell = Cell()
+    await wifi.aconnect()
+    mqtt = MQTT(wifi=wifi)
+    for i in range(5):  
+        asyncio.run(mqtt.amsg(f'testing #{i}', 'test', 'cell'))
+    st = ticks_ms()
+    while st + 700 > ticks_ms():
+        pass #print((st +700- ticks_ms())//100)
+    wifi.off()
+
+if __name__ == '__main__':
+    asyncio.run(main())
+        

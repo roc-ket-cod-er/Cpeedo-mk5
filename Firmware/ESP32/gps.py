@@ -113,3 +113,10 @@ class GPS(object):
         self.cmd("#")
         self.rq()
         self.shut_down = False
+        
+    @property
+    def version(self):
+        return "v1.0.0"
+    @property
+    def _version(self):
+        return [1, 0, 0]
