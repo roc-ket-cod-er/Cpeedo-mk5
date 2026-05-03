@@ -283,6 +283,11 @@ int main(void)
 	  // TURN ON/OFF ESP32
 	  if(!read_io(ON_OFF)) {
 		  print("ON/OFF\n");
+		  if (esp_on && update) {
+			  write_io(ESP_PWR, OFF);
+			  esp_on = false;
+			  HAL_Delay(50);
+		  }
 		  if (!esp_on) {
 			  write_io(ESP_PWR, ON);				// Turn on ESP32 Regulator
 			  write_io(TX, OFF);					// Stop telling the ESP32 to shut off
@@ -317,7 +322,7 @@ int main(void)
 		  }
 	  }
 
-	  if (esp_on && esp_on_ticks + 80000 < HAL_GetTick() && update) {
+	  if (esp_on && esp_on_ticks + 90000 < HAL_GetTick() && update) {
 		  print("ESP Update Timeout. Rebooting...\n");
 		  write_io(ESP_PWR, OFF);				// Shut it off
 		  write_io(LED, ON);					// Turn on LED
