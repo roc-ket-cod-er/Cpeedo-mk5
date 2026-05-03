@@ -9,12 +9,13 @@ race_pin = Pin(3, Pin.IN, Pin.PULL_UP)
 if not race_pin.value():
     import race
 # Imports
-from sim7080g import Cell
 from gps import GPS
 from time import sleep_ms, ticks_ms
 import uasyncio as asyncio
 
 from wifi import Wifi
+from sim7080g import Cell
+from mqtt import MQTT
 
 # Check if boot was for tracking or for 
 track_pin = Pin(44, Pin.IN)
@@ -34,6 +35,7 @@ ms = "ms"
 cell = Cell()
 gps = GPS()
 wifi = Wifi()
+mqtt = MQTT(cell, wifi)
 
 # initialize IOs
 shut_off_pin = Pin(0, Pin.IN, Pin.PULL_UP)
@@ -77,10 +79,8 @@ async def update_mqtt():
         tft.black
     )
     
-    await cell.aconnect('io')
-    
     if gps.lock:
-        await cell.amsg(f'{gps.pos[1][0]} {gps.pos[1][1]} {gps.pos[0][0]} {gps.pos[0][1]}', "trips")
+        await mqtt.amsg(f'{gps.pos[1][0]} {gps.pos[1][1]} {gps.pos[0][0]} {gps.pos[0][1]}', "trips", qos=0)
     
     await cell.aoff()
     cell_free = True
@@ -96,17 +96,6 @@ async def track():
                 break
             print(gps.sats)
             sleep_ms(20)
-        
-        try:
-            w_connect=True
-            wifi.on()
-            cell.connect('io')
-            if await wifi.aconnect():      
-                wifi.connect_to_mqtt()
-        except Exception as e:
-            print(e)
-            w_connect=False
-            cell.connect('io')
             
         while ticks_ms() < 40_000 + st:
             sleep_ms(20)
@@ -117,27 +106,24 @@ async def track():
         gps.ban_updates()
         if gps.lock:
             gps.off()
-            if w_connect:
-                print("wifi")
-                wifi.pub_lat(f"{gps.pos[1][0]}")
-                sleep_ms(6_000)
-                wifi.pub_long(f"{gps.pos[0][0]}")
-                sleep_ms(6_000)
-                
-                bat_list = cell.at('CBC').split(',')
-                cell.send_message(f"{"/".join(map(str, gps.sats))}s {round(gps.speed, 2)}km/h {gps.gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-5]}mV) waited: {(ticks_ms()-st)//1000}s", feed='other-info')
-            else:
-                bat_list = cell.at('CBC').split(',')
-                if gps.pos[1][0] != 0:
-                    cell.send_message(f"{gps.pos[1][0]}",  feed='latitude') # Send latitude
-                else:
-                    cell.send_message(f"lat, {gps.pos[1][0]}, {gps.pos[0][0]}, {"/".join(map(str, gps.sats))}", feed='debug')
-                if gps.pos[0][0] != 0:
-                    cell.send_message(f"{gps.pos[0][0]}", feed='longitude') # Send longitude
-                else:
-                    cell.send_message(f"long {gps.pos[1][0]}, {gps.pos[0][0]}, {"/".join(map(str, gps.sats))}", feed='debug')
-                    
-                cell.send_message(f"{"/".join(map(str, gps.sats))}s {round(gps.speed, 2)}km/h {gps.gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-5]}mV) waited: {(ticks_ms()-st)//1000}s", feed='other-info')
+            cell.on()
+            bat_list = cell.at('CBC').split(',')
+            
+            await mqtt.amsg(
+                f"{gps.pos[1][0]}",
+                "latitude"
+            )
+            
+            await mqtt.amsg(
+                f"{gps.pos[0][0]}",
+                "longitude"
+            )
+            
+            await mqtt.amsg(
+                f"{"/".join(map(str, gps.sats))}s {round(gps.speed, 2)}km/h {gps.gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-5]}mV) waited: {(ticks_ms()-st)//1000}s",
+                feed='other-info'
+            )
+            
         else:
             cell.send_message(f"NO LOCK: {"/".join(map(str, gps.sats))}s {gps.gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-5]}mV) waited: {(ticks_ms()-st)//1000}s", feed='other-info')
     except Exception as e:
@@ -153,7 +139,7 @@ async def main():
     # Track if requested
     if TRACK:
         await track()
-        return
+        return 1
     # Max out speed
     freq(240_000_000)
     

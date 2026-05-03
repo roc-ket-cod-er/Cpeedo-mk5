@@ -1,4 +1,5 @@
 import uasyncio as asyncio
+from uasyncio import sleep_ms
 from time import sleep, ticks_ms
 
 class MQTT(object):
@@ -23,7 +24,7 @@ class MQTT(object):
                     self.wifi = wifi
                     self.wifi_setup = True
                 else:
-                    raise RuntimeError(f"Incorrect wifi object version: {wifi._version[0]}")
+                    raise RuntimeError(f"Incorrect wifi object version: {wifi.version}")
             except AttributeError:
                 raise RuntimeError("Incorrect wifi object given. Required module is availible at 'https://github.com/roc-ket-cod-er/Cpeedo-mk5/blob/main/Firmware/ESP32/wifi.py'")
         else:
@@ -37,7 +38,7 @@ class MQTT(object):
         else:
             raise ValueError("No wifi object or cell object given.")
         
-    async def _wifimsg(self, msg, feed, qos):
+    async def _wifimsg(self, msg, feed, qos, show=True):
         if self.wifi_setup:
             if self.wifi.is_on:
                 started = 'on'
@@ -47,12 +48,15 @@ class MQTT(object):
             if not self.wifi.is_connected_to_wifi:
                 await self.wifi.aconnect()
             try:
-                print(msg)
+                if show:
+                    print(msg)
                 self.wifi.msg(msg, feed, qos)
             except AttributeError:
                 self.wifi.connect_to_mqtt()
                 self.wifi.msg(msg, feed, qos)
-            await asyncio.sleep_ms(1500)
+                
+            if qos == 0:
+                await sleep_ms(1500)
             
             if started == 'off':
                 self.wifi.off()
@@ -70,14 +74,19 @@ class MQTT(object):
         await self.cell.amsg(msg, feed)
         return True
         
-    async def amsg(self, msg, feed, prefer="wifi", qos=0):
+    async def amsg(self, msg, feed, prefer="wifi", qos=1):
+        st=ticks_ms()
         if prefer.lower() == "wifi":
             if await self._wifimsg(msg, feed, qos):
+                print(ticks_ms() - st)
                 return True
+            print(ticks_ms() - st)
             return await self._cellmsg(msg, feed)
         else:
             if await self._cellmsg(msg, feed):
+                print(ticks_ms() - st)
                 return True
+            print(ticks_ms() - st)
             return await self._wifimsg(msg, feed, qos)
             
 async def main():
@@ -88,13 +97,13 @@ async def main():
     cell = Cell()
     await wifi.aconnect()
     mqtt = MQTT(wifi=wifi)
-    for i in range(5):  
-        asyncio.run(mqtt.amsg(f'testing #{i}', 'test', 'cell'))
     st = ticks_ms()
-    while st + 700 > ticks_ms():
-        pass #print((st +700- ticks_ms())//100)
+    for i in range(5):
+        asyncio.create_task(mqtt.amsg(f'testing #{i+1}', 'test'))
+        await sleep_ms(0)
+    print(ticks_ms() - st)
     wifi.off()
 
 if __name__ == '__main__':
     asyncio.run(main())
-        
+
