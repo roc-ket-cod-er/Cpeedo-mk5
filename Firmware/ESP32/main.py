@@ -96,7 +96,10 @@ async def track():
                 break
             print(gps.sats)
             sleep_ms(20)
-            
+        
+        cell.on()
+        wifi.on()
+        
         while ticks_ms() < 40_000 + st:
             sleep_ms(20)
             gps.update(4096)
@@ -106,7 +109,6 @@ async def track():
         gps.ban_updates()
         if gps.lock:
             gps.off()
-            cell.on()
             bat_list = cell.at('CBC').split(',')
             
             await mqtt.amsg(
@@ -114,6 +116,8 @@ async def track():
                 "latitude"
             )
             
+            if wifi.is_connected_to_wifi:
+                cell.off()
             await mqtt.amsg(
                 f"{gps.pos[0][0]}",
                 "longitude"

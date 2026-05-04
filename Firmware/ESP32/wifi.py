@@ -20,9 +20,8 @@ class Wifi(object):
         self._scan_thread = _thread.start_new_thread(self._scan, ())
         self._scan_results = None
         
-        self.is_connected_to_mqtt = True
+        self.is_connected_to_mqtt = False
         
-        self.wifi_info = wifi_info
         self.connected_to = None
         
         if not self.no_info:
@@ -31,10 +30,10 @@ class Wifi(object):
                         user=user_name, 
                         password=key,
                         ssl=False)
+            self.wifi_info = wifi_info
+            self.username = user_name     
         else:
             self.client = None
-        self.username = user_name        
-        if self.no_info:
             if ssid != None:
                 self.ssid = ssid
             else:
@@ -86,11 +85,18 @@ class Wifi(object):
         
         return self._scan_results
     
-    async def _connect(self, ssid, password):
+    async def _connect(self, ssid, password, timeout=10):
+        st = ticks_ms()
         self.wlan.connect(ssid, password)
         await asyncio.sleep_ms(200)
+        i=0
         while self.wlan.status() == STAT_CONNECTING:
-            await asyncio.sleep_ms(300)
+            await asyncio.sleep_ms(99)
+            
+            i += 1
+            if i >= timeout*10:
+                return False
+        
                   
         if self.wlan.isconnected():
             self.connected_to = ssid
@@ -99,7 +105,7 @@ class Wifi(object):
             print(WLAN.status)
             return False
     
-    async def aconnect(self, force=False):
+    async def aconnect(self, force=False, timeout=10):
         if self.wlan.isconnected() and not force:
             return True
         elif force:
@@ -108,7 +114,7 @@ class Wifi(object):
             self.on()
             
         if self.no_info:
-            return await self._connect(self.ssid, self.password)
+            return await self._connect(self.ssid, self.password, timeout)
         else:
             visible_networks = []
             info = await self.scan()
@@ -116,10 +122,11 @@ class Wifi(object):
             for network in info:
                 visible_networks.append(network[0].decode())
                 
-            # print(visible_networks)
+            print(visible_networks)
             for network in self.wifi_info:
                 if network in visible_networks:
-                    if await self._connect(network, self.wifi_info[network]):
+                    print(network)
+                    if await self._connect(network, self.wifi_info[network], timeout):
                         return True
             return False
     
@@ -168,7 +175,7 @@ async def test():
     wifi.off()
     sleep_ms(50)
     wifi.on()
-    print(f"\n\n{await wifi.connect()}")
+    print(f"\n\n{await wifi.aconnect()}")
     print(wifi.connected_to)
     wifi.connect_to_mqtt()
     wifi.pub_lat("43.50528")

@@ -46,7 +46,8 @@ class MQTT(object):
                 started = 'off'
                 self.wifi.on()
             if not self.wifi.is_connected_to_wifi:
-                await self.wifi.aconnect()
+                if not await self.wifi.aconnect():
+                    return False
             try:
                 if show:
                     print(msg)
@@ -77,32 +78,33 @@ class MQTT(object):
     async def amsg(self, msg, feed, prefer="wifi", qos=1):
         st=ticks_ms()
         if prefer.lower() == "wifi":
+            print("wifi prefered")
             if await self._wifimsg(msg, feed, qos):
-                print(ticks_ms() - st)
+                print(ticks_ms() - st, 'wifi')
                 return True
-            print(ticks_ms() - st)
+            print(ticks_ms() - st, "cell")
             return await self._cellmsg(msg, feed)
         else:
             if await self._cellmsg(msg, feed):
-                print(ticks_ms() - st)
+                print(ticks_ms() - st, "cell")
                 return True
-            print(ticks_ms() - st)
+            print(ticks_ms() - st, 'wifi')
             return await self._wifimsg(msg, feed, qos)
             
 async def main():
     from wifi import Wifi
     from sim7080g import Cell
-    wifi=Wifi()
-    wifi.on()
+    wifi=Wifi(on=True)
     cell = Cell()
-    await wifi.aconnect()
-    mqtt = MQTT(wifi=wifi)
+    mqtt = MQTT(wifi=wifi, cell=cell)
     st = ticks_ms()
     for i in range(5):
-        asyncio.create_task(mqtt.amsg(f'testing #{i+1}', 'test'))
+        #asyncio.create_task(mqtt.amsg(f'testing #{i+1}', 'test'))
+        await mqtt.amsg(f'testing #{i+1}', 'test')
         await sleep_ms(0)
     print(ticks_ms() - st)
     wifi.off()
+    cell.off()
 
 if __name__ == '__main__':
     asyncio.run(main())
