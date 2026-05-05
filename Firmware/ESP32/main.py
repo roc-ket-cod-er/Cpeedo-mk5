@@ -107,9 +107,9 @@ async def track():
                 break
         
         gps.ban_updates()
+        bat_list = cell.at('CBC').split(',')
         if gps.lock:
             gps.off()
-            bat_list = cell.at('CBC').split(',')
             
             await mqtt.amsg(
                 f"{gps.pos[1][0]}",
