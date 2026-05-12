@@ -75,20 +75,24 @@ class MQTT(object):
         await self.cell.amsg(msg, feed)
         return True
         
-    async def amsg(self, msg, feed, prefer="wifi", qos=1):
+    async def amsg(self, msg, feed, prefer="wifi", qos=1, debug=False):
         st=ticks_ms()
         if prefer.lower() == "wifi":
             print("wifi prefered")
             if await self._wifimsg(msg, feed, qos):
-                print(ticks_ms() - st, 'wifi')
+                if debug:
+                    print(ticks_ms() - st, 'wifi')
                 return True
-            print(ticks_ms() - st, "cell")
+            if debug:
+                print(ticks_ms() - st, "cell")
             return await self._cellmsg(msg, feed)
         else:
             if await self._cellmsg(msg, feed):
-                print(ticks_ms() - st, "cell")
+                if debug:
+                    print(ticks_ms() - st, "cell")
                 return True
-            print(ticks_ms() - st, 'wifi')
+            if debug:
+                print(ticks_ms() - st, 'wifi')
             return await self._wifimsg(msg, feed, qos)
             
 async def main():

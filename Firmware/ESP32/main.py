@@ -5,7 +5,7 @@ from machine import Pin, UART, freq
 stm_com = Pin(43, Pin.OUT)
 stm_com.off()
 
-race_pin = Pin(3, Pin.IN, Pin.PULL_UP)
+race_pin = Pin(6, Pin.IN, Pin.PULL_UP)
 if not race_pin.value():
     import race
 # Imports
@@ -116,20 +116,26 @@ async def track():
                 "latitude"
             )
             
+            cell_offing = False
             if wifi.is_connected_to_wifi:
-                cell.off()
+                print("turning off")
+                cell_offing = True
+                cell_off_func = asyncio.create_task(cell.aoff())
+                
             await mqtt.amsg(
                 f"{gps.pos[0][0]}",
                 "longitude"
             )
             
             await mqtt.amsg(
-                f"{"/".join(map(str, gps.sats))}s {round(gps.speed, 2)}km/h {gps.gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-5]}mV) waited: {(ticks_ms()-st)//1000}s",
+                f"{"/".join(map(str, gps.sats))}s {round(gps.speed, 2)}km/h {gps.gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-8]}mV) waited: {(ticks_ms()-st)//1000}s",
                 feed='other-info'
             )
-            
+            if cell_offing:
+                while not cell_off_func.done():
+                    await asyncio.sleep_ms(10)
         else:
-            cell.send_message(f"NO LOCK: {"/".join(map(str, gps.sats))}s {gps.gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-5]}mV) waited: {(ticks_ms()-st)//1000}s", feed='other-info')
+            cell.send_message(f"NO LOCK: {"/".join(map(str, gps.sats))}s {gps.gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-8]}mV) waited: {(ticks_ms()-st)//1000}s", feed='other-info')
     except Exception as e:
         print(e)
         shut_down()
