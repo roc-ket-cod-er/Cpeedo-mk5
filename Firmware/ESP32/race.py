@@ -39,10 +39,16 @@ while True:
     print(battery_voltage)
     
     if gps.lock:
-        cell.send_message(f'{battery_voltage}V {spd}', "ev-run")
+        cell.send_message(
+            f'{battery_voltage}V {spd} {cell.at('CBC').split(',')[2][:-8]} {"/".join(map(str, gps.sats))}', "ev-run"
+        )
     else:
-        cell.send_message(f'{battery_voltage}V-nolock {spd}', "ev-run")
-    print(2100+loop_start-ticks_ms())
+        cell.send_message(
+            f'{battery_voltage}V-nolock {spd} {cell.at('CBC').split(',')[2][:-8]} {"/".join(map(str, gps.sats))}', "ev-run"
+        )
+        
+    print(ticks_ms() - loop_start)
     gps.allow_updates()
+    gps.update(4096)
     while 2100+loop_start-ticks_ms() > 0:
-        gps.update()
+        gps.update(4096)
