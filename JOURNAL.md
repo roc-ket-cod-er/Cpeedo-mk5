@@ -2794,7 +2794,7 @@ and implementation:
         self.last_given_timestamp = self.gps.timestamp
 ```
 
-# NOTE: HOURS DECREASED BY 0.5 AS I SORT OF GOOFED UP ON THE PREVIOUS JOURNAL
+**NOTE: HOURS DECREASED BY 0.5 AS I SORT OF GOOFED UP ON THE PREVIOUS JOURNAL**
 
 ![image](https://blueprint.hackclub.com/user-attachments/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTM1MTEyLCJwdXIiOiJibG9iX2lkIn19--42b54e532393eed7ca2dc2757c4721e9e6ae583c/image.png)
   
