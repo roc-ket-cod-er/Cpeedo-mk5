@@ -3645,7 +3645,7 @@ Let's get the quick one out of the way: I real quick adjusted the timing of thin
 In addition, I cleaned up the main code with the addition of clear section labels. Hope over to my github to check them out, and here's a sample.
 
 ```
-# -------------- Function Defines ---------------- #
+ # -------------- Function Defines ---------------- #
 
 # To shut everything down
 def shut_down():
@@ -3654,7 +3654,7 @@ def shut_down():
 async def update_mqtt():
     ...
 
-# ---------------- TRACKING CODE STARTS HERE ----------------- #
+ # ---------------- TRACKING CODE STARTS HERE ----------------- #
 def track():
 ```
 ![image](https://blueprint.hackclub.com/user-attachments/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTM1NjAxLCJwdXIiOiJibG9iX2lkIn19--ad3bacf09bb2e29b12f86290f7922f378d4bff42/image.png)
