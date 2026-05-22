@@ -4276,3 +4276,32 @@ It took me an hour and a half for that ![image](https://blueprint.hackclub.com/u
 
 I'm actually gonna log 0.1hrs though because I think it definitely seems like I've been inflating hours, but that's just my journal quality becoming lower. I really don't know why my thoughts just aren't that clear ig...  
 
+# 5/22/2026 - OH I HATE FORGE.
+
+Ok I take that back, I take that back. Pls bro I said I apologize.
+
+
+Anyways, nvm I don't actually. This website is actually so cooked.
+
+Here's how the regex seems to be working: a new journal is when you start a new item with the '#' symbol. The '#' has to be the very first thing, and it doesn't matter what you have after it. You could have another '#' and it would still count it as a new journal.
+
+And right there is the problem. I like 400 '#'s in my total imported journal, and every single one of them had to be checked. At first, instead of doing that, I decided to just replace them '###' with a line break and a
+
+---
+
+but even then it felt really off, and I discovered that I don't have to, I just just put a space in the beginiing. Not an easy task, changing all of them, but hey at least now my times are far more realistic!
+
+![alt text](assets/image.png)
+![alt text](assets/image-1.png)
+
+Still not fun stuff in any way, but alas not much I can do about it.
+
+Ah well I just ended up doing all that work just for Cybdo to change it tomorrow, didn't I...
+
+He better not brick my current work.
+
+I will admit this doesn't look like an hour job, but you don't understand how tedius of a job it is to look for all these errors and find them.
+
+[This lapse](https://lapse.hackclub.com/timelapse/I8IFTq0RHuYB) will only show you part of the story 'cause I'm sorta cooked and deleted half of it by switching the camera or smth.
+
+Time spent: 50 minutes.
