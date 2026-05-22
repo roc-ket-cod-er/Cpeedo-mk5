@@ -11,6 +11,8 @@ created_at: "2026-02-20"
 
 # 2/25/2026 - Bought some stuff & checks and stuff  
 
+_Time spent: 0.6h_  
+
 Mostly just double-triple checked stuff and bought it!
 
 ![image](https://blueprint.hackclub.com/user-attachments/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTExMzMxLCJwdXIiOiJibG9iX2lkIn19--5b13a709232a66e8ac3e9be6755bc14bdc8584d5/image.png)
@@ -19,11 +21,9 @@ So yeah, the thing is that one of the things was from a blocked category, so I h
 
 Well anyways I probably did some other stuff but I forgot it all so...  
 
-Total time spent: 0.6h
-
 # 2/27/2026 6 PM - Rerouted a bunch of the bottom layer  
 
-Total time spent: 1.9h_  
+_Time spent: 1.9h_  
 
 Basically, I want to put art onto the bottom layer, and thus I rerouted many signals so that the bottom is just mostly ground, on which its far safer to remove the soldermask
 
@@ -43,7 +43,7 @@ I also tidied up this corridor so that the majority is in line with itself and t
 
 # 2/27/2026 9:36 PM - Artwork  
 
-Total time spent: 0.7h_  
+_Time spent: 0.7h_  
 
 I added a bunch of new art, fully custom (except for the hackclub logo)
 
@@ -60,7 +60,7 @@ I'm going to clean up the backside a bit, but first I have to move all the Part-
 
 # 2/27/2026 9:55 PM - Designators  
 
-Total time spent: 0.4h_  
+_Time spent: 0.4h_  
 
 I moved all the designators on the top side so that they are readable with the new wavy lines. The backside will be done tomorrow, when I redo that silkscreen to not conflict with the hackclub logo.
 
@@ -73,7 +73,7 @@ Anyways, there just was this one spot with the microSD card where it was tough, 
 
 # 3/2/2026 - Artwork & Suture/Stiching Vias  
 
-Total time spent: 2.6h_  
+_Time spent: 2.6h_  
 
 ![image](https://blueprint.hackclub.com/user-attachments/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTEzODI0LCJwdXIiOiJibG9iX2lkIn19--4e6736783c9aeef7a8aa82197c35eea4ac982f90/image.png)
 
@@ -107,7 +107,7 @@ Required some wiring, including some on the bottom layer. (Which is my mostly em
 
 # 3/3/2026 - Added Another FPC Connector  
 
-Total time spent: 4.3h_  
+_Time spent: 4.3h_  
 
 This is basically just so that if in the future I want to have it connect to a daughter board, it will be able actually communicate. Because I didn't have access to STM32CUBEMX, I had to look through the datasheet to find out which pins (of the remaining) were the most capable so that I could actually use them. I settled on this setup:
 
@@ -178,7 +178,7 @@ Oh yeah, btw re-added the suture vias (the ones that connect between layers)
 
 # 3/4/2026 - Tested (& Received) E-INK DISPLAY!!!  
 
-Total time spent: 2.3h_  
+_Time spent: 2.3h_  
 
 Firstly, I received the displays!!!!!
 
@@ -198,7 +198,7 @@ All in all, it's really great it worked, but it took too much effort ... Hoping 
 
 # 3/10/2026 - LCD & E-INKing  
 
-Total time spent: 4.5h_  
+_Time spent: 4.5h_  
 
 Alr, so, believe it or not, the LCD just worked first try!!!!!!
 
@@ -273,7 +273,7 @@ Oh well, also two more notes:
 
 # 3/11/2026 - Re-3D modelling  
 
-Total time spent: 2.0h_  
+_Time spent: 2.0h_  
 
 I finally came around to do it, and so here it is!
 
@@ -303,7 +303,7 @@ I also will have to figure out the bike mount clips, but I think I'll do that pa
 
 # 3/13/2026 - Pretty Much Finished 3D Model  
 
-Total time spent: 4.5h_  
+_Time spent: 4.5h_  
 
 So yeah, I Pretty Much Finished 3D Model.
 
@@ -360,7 +360,7 @@ FULL:
 
 # 3/14/2026 - Worked On 3D Model: Bike Mount  
 
-Total time spent: 1.8h_  
+_Time spent: 1.8h_  
 
 I speedran the bike mount, the place where the speedo will mount to the bike
 
@@ -388,7 +388,7 @@ Now all I need to do is add the screw holes, and I should be done!
 
 # 3/15/2026 - Added:   S O   M A N Y   S C R E W   H O L E S  
 
-Total time spent: 3.7h_  
+_Time spent: 3.7h_  
 
 yep, that's what I did.
 
@@ -457,7 +457,7 @@ bonus:
 
 # 3/16/2026 - PCBs ARRIVED: GOT THE LED TO BLINK!!!!!  
 
-Total time spent: 1.7h_  
+_Time spent: 1.7h_  
 
 Yep. Believe it or not, the naysayers and the haters have been shut down for good.
 
@@ -491,7 +491,7 @@ Also, I'm paranoid I'm going to plug the battery in the wrong way and cook my st
 
 # 3/18/2026 - Got CELL TO WORK & soldered esp32  
 
-Total time spent: 7.8h_  
+_Time spent: 7.8h_  
 
 Most importantly, I got the CELL STUFF TO WORK!!!
 
@@ -593,7 +593,7 @@ I also had the horrifying thought of giving up hardware. Super happy I didn't!!
 
 # 3/20/2026 - Cleaning Up Basic Code & HTTP SADNESS  
 
-Total time spent: 5.1h_  
+_Time spent: 5.1h_  
 
 So I spent an hour or two cleaning up my code, so basically it's like _clean_ and working well.
 
@@ -682,7 +682,7 @@ Also, I'd just like to note: picture are going to be hard as I don't have much t
 
 # 3/21/2026 8 PM - Finished 3D Model  
 
-Total time spent: 2.0h_  
+_Time spent: 2.0h_  
 
 Yep!
 
@@ -719,7 +719,7 @@ I also fixed up the display holes so that they would actually hold the screw, an
 
 # 3/21/2026 9 PM - Got 2x 3D printed parts  
 
-Total time spent: 0.1h_  
+_Time spent: 0.1h_  
 
 I went to the library and just sat there for ~30 mins waiting for my print. Gonna have a lot more of that...
 
@@ -731,7 +731,7 @@ I'm not adding the 2hrs.
 
 # 3/21/2026 10 PM - Got Screens To Work  
 
-Total time spent: 1.8h_  
+_Time spent: 1.8h_  
 
 So yeah, basically I got them to work!
 
@@ -777,7 +777,7 @@ Anyways, I'm a bit concerned about the amount of power the cell chip is drawing,
 
 # 3/22/2026 6 PM - Tried To Get Arduino IDE  
 
-Total time spent: 1.3h_  
+_Time spent: 1.3h_  
 
 I know that all my previous journals always had stuff getting working, but this time it was very different.
 
@@ -791,7 +791,7 @@ lowk i just wish we could get micropython.
 
 # 3/22/2026 9 PM - Got Two Screens to Work  
 
-Total time spent: 0.5h_  
+_Time spent: 0.5h_  
 
 Spent a bit of time modifying the code to drive both screens simultaneously, and here's the result!
 
@@ -804,7 +804,7 @@ Only one minor hiccup, I accidentally defined two different SPI lines for each, 
 
 # 3/23/2026 - Worked on connection script optimisation  
 
-Total time spent: 0.6h_  
+_Time spent: 0.6h_  
 
 I made a new connected function which basically uses AT commands to detect if its connected so it doesn't reconnect, unless the connect functions' `force=True` (default `False`)
 
@@ -818,7 +818,7 @@ I also stated implementing the `show` flag, to hide outputs for useless commands
 
 # 3/27/2026 - 3D Model Fix & Coding  
 
-Total time spent: 4.9h_  
+_Time spent: 4.9h_  
 
 So I got my parts, but as they required support material, they are all cooked. Well that was a nice quick fix, but I lost an hour or so in going to start the print and the getting them.
 
@@ -873,7 +873,7 @@ Well I probably forgot smth, but that should be the gist of it!
 
 # 3/28/2026 6 PM - Threaded Holes  
 
-Total time spent: 2.0h_  
+_Time spent: 2.0h_  
 
 Well that was a lot of holes. I ran the screws in the holes to thread them. For the holes that were not so usable, I first drilled out the support material, and _then_ threaded them.
 
@@ -889,7 +889,7 @@ I keep forgetting to get receipts, so the majority of the prints are coming out 
 
 # 3/28/2026 10 PM - Software and assembly  
 
-Total time spent: 4.0h_  
+_Time spent: 4.0h_  
 
 I got the rest of the components!
 
@@ -911,7 +911,7 @@ I will be prepping to submit this, even though the STM32 portion isn't really do
 
 # 3/29/2026 - Over Discharged my LIIONS(to 2V) & software & testing  
 
-Total time spent: 2.0h_  
+_Time spent: 2.0h_  
 
 I wrote some software and stuff to show the satellite information to see how many satellites are visible and connected. In addition, it also tells you, for each satellite, the signal-to-noise ratio, snr, and somehow I am getting ~49 outside, with high 40s for like 5 satellites, with a patch antenna. As if this isn't crazy enough, my HDOP is like ~1, and I am getting like ~35 near a window (inside) and like 30 near my monitors.
 
@@ -924,7 +924,7 @@ I also did some tests outside, running around, going for a walk and all that, an
 
 # 3/30/2026 8 PM - PICS!!!! & Assembly  
 
-Total time spent: 2.0h_  
+_Time spent: 2.0h_  
 
 I assembled like 10 screws to just have like the bare minimum structure, but I had to disassemble it before going somewhere (to turn it off) and well here it is!
 
@@ -948,7 +948,7 @@ The battery-clip and stuff are a bit tight and hard to put together as I have to
 
 # 3/30/2026 9 PM - Updated Bike Mount Part to Fit.  
 
-Total time spent: 0.5h_  
+_Time spent: 0.5h_  
 
 Yep, that's exactly what I did. I extended the part, resized the holes to become perfect (hopefully) and I also made is so that it isn't the thick diameter all the way, just for a small area, which of course is filleted.
 
@@ -957,7 +957,7 @@ Yep, that's exactly what I did. I extended the part, resized the holes to become
 
 # 3/31/2026 - Got a 3D print, assembled, updated code  
 
-Total time spent: 2.5h_  
+_Time spent: 2.5h_  
 
 ok well that was ... a bus ride
 
@@ -987,7 +987,7 @@ That assembly took a while as a component was a bit too big and thus flexed outw
 
 # 4/3/2026 6 PM - Assembled/Tested [slight retro]  
 
-Total time spent: 3.7h_  
+_Time spent: 3.7h_  
 
 Today was probably the nicest day this year, so far, and thus I took that opportunity to take it out for a bike ride. However, I had to assemble it first. There was mostly just the thing that I assembled it, but then I remembered that I had to flip the screen (in code) so I had to disassemble it to reprogram it. After re-assembling it, for some reason the GPS hung out, and thus I started to disassemble it. Lucky me, for some reason after just removing the first screw, it looked like it restarted, and started working.
 
@@ -1033,7 +1033,7 @@ Google maps shot of where it failed. I did not have my phone with me for the ent
 
 # 4/3/2026 7 PM - PROGRAMMED STM32  
 
-Total time spent: 3.3h_  
+_Time spent: 3.3h_  
 
 So if you read my last journal, you'll know that I was having a bunch of trouble with the battery bouncing around and messing with the cell chip, and thus in the meantime I've worked on some code in the STM32CUBEIDE to allow me to basically short out a set of pins to shut down the ESP32, and another set to wake them up.
 
@@ -1055,7 +1055,7 @@ I was thinking, I might just make it so that the same button will turn the ESP32
 
 # 4/4/2026 - Failed to get ina226 to work even after spending ~7 hours  
 
-Total time spent: 7.1h_  
+_Time spent: 7.1h_  
 
 Ok so basically, the tldr is that I tried to get libraries to work with the STM32 but couldn't understand it, so I tried getting the Arduino IDE to work again, it worked, but some very important pins like PC5 were not supported and thus I can use it either. Next steps are to either try getting my real board in the STM32 interface or building a simple custom library in STM32 HAL.
 
@@ -1143,7 +1143,7 @@ As always, to make sure my journals are as detailed and engaging as possible I h
 
 # 4/5/2026 3 PM - Made Code Simpler; Learned Booleans; Commented Code  
 
-Total time spent: 0.4h_  
+_Time spent: 0.4h_  
 
 Yep. Did you know that C, natively, doesn't have booleans?
 
@@ -1190,7 +1190,7 @@ Next up, I'm going to rename all of those pins and stuff so that they actually m
 
 # 4/5/2026 9 PM - Further cleaned code; Added anti-theft tracking.  
 
-Total time spent: 4.5h_  
+_Time spent: 4.5h_  
 
 Here's pretty much the same code as last time, but as you can see its cleaner
 
@@ -1360,7 +1360,7 @@ I'm probably missing something, but I really can't spend anymore time journaling
 
 # 4/7/2026 10:04 PM - Filmed, Edited and Finished Demo  
 
-Total time spent: 1.0h_  
+_Time spent: 1.0h_  
 
 ### [DEMO!!!!](https://youtube.com/shorts/DLDQR-w_GeQ)
 
@@ -1378,7 +1378,7 @@ In addition, I also used up one of my three free monthly downloads for music (fr
 
 # 4/7/2026 10:21 PM - Debugging Random Shutdowns.  
 
-Total time spent: 1.5h_  
+_Time spent: 1.5h_  
 
 So the thing is, there is an off chance that my board might be like glitching, because Adafruit IO stopped receiving messages at 3 AM, for whatever reason. When I woke this morning, for some reason the ESP32 was still on, so I just rebooted the board. Since then it's worked just fine until now (10pm) and yeah.
 
@@ -1423,7 +1423,7 @@ Well, another thing, just as I'm journalling, this is the second time its woke u
 
 # 4/8/2026 9 PM - Failed To Get STM32 USB Working; INA226 Code  
 
-Total time spent: 4.5h_  
+_Time spent: 4.5h_  
 
 Ok well today was pretty much a total failure, as I spent all my time trying to get the INA226 to work, for which I needed to have USB communication or something to actually get the data off.
 
@@ -1455,7 +1455,7 @@ I'm not losing my code again. (Even if it still is quite simple)
 
 # 4/8/2026 10 PM - Gave GNSS More Time To Set Up  
 
-Total time spent: 0.2h_  
+_Time spent: 0.2h_  
 
 I update my code to read:
 
@@ -1467,7 +1467,7 @@ btw I also tested this ofc and everything.
 
 # 4/9/2026 - Code Improvements, Cleaned up feed so far.  
 
-Total time spent: 3.3h_  
+_Time spent: 3.3h_  
 
 Firstly, I just went into Adafruit IO and just cleaned up all the zero values, but just doing on feed took me _so_ long that I just gave up and deleted the feeds.
 
@@ -1517,7 +1517,7 @@ I also played with some boot ordering, so now it will turn on the modem, wait fo
 
 # 4/10/2026 - Failed To Get STM32 USB Working v2  
 
-Total time spent: 3.0h_  
+_Time spent: 3.0h_  
 
 This time, instead of using USBX, I tried to get the legacy serial to work, and I found [this link that has](https://community.st.com/t5/stm32-mcus/how-to-use-stmicroelectronics-classic-usb-device-middleware-with/ta-p/599274) (supposedly) support for the [u5 series (link highlights mention)](https://community.st.com/t5/stm32-mcus/how-to-use-stmicroelectronics-classic-usb-device-middleware-with/ta-p/599274#:~:text=families%2C%20such%20as-,STM32U5,-.)
 
@@ -1573,7 +1573,7 @@ If this works I guess that would be one heck of a way to go out: struggling to f
 
 # 4/11/2026 12:08 PM - Made New STM32 Files & Project  
 
-Total time spent: 0.5h_  
+_Time spent: 0.5h_  
 
 So basically, there were a few things bugging me, primarily not being able to undo a lot, the project name, and having all my messed up files from trying the USB things from yesterday.
 
@@ -1591,7 +1591,7 @@ Btw I also tested the code I put on it, and so far all is well!
 
 # 4/11/2026 12:26 PM - Configured Clock to be more Accurate  
 
-Total time spent: 0.2h_  
+_Time spent: 0.2h_  
 
 Instead of using the internal HSI clock, I've now re-configured it to use the external 12MHz clock I put on it. This should really help with the time drift that it otherwise experiences of about ~5 seconds per 10 minutes.
 
@@ -1600,7 +1600,7 @@ Instead of using the internal HSI clock, I've now re-configured it to use the ex
 
 # 4/11/2026 7 PM - GOT USB TO WORK AFTER WHAT FEELS LIKE AGES!!!!!!!!!!!!!!!!!!  
 
-Total time spent: 3.8h_  
+_Time spent: 3.8h_  
 
 You see how I maxed the characters out?
 
@@ -1685,7 +1685,7 @@ Well, time to go get the print function working!
 
 # 4/11/2026 9 PM - Print Function & Clocks  
 
-Total time spent: 1.5h_  
+_Time spent: 1.5h_  
 
 So I quickly got a basic print function going, and then just vibecoded a more advanced one, so that now you can only send eight bites at a time and not overflow the machinery.
 
@@ -1699,7 +1699,7 @@ And here's the data, updating really slowly, just once a seconds, telling me if 
 
 # 4/12/2026 5 PM - Got INA226 to work; used it to measure power draws.  
 
-Total time spent: 3.5h_  
+_Time spent: 3.5h_  
 
 Well, the great news is that the INA226 is working, but it is a bit redundant as the cell chip can already take care of basic voltage measuring and functioning as a fuel cell chip.
 
@@ -1789,7 +1789,7 @@ int current_ma() {
 
 # 4/12/2026 6 PM - Tried To Get SD Card to work  
 
-Total time spent: 0.2h_  
+_Time spent: 0.2h_  
 
 I spent a few minutes finding a tutorial to get the SD Card to work, but it really felt like far more trouble than it was worth, with the tutorial videos being like 50 minutes long, plus my own debugging and understanding so I pretty much quit the second they asked for a middleware that I didn't have.
 
@@ -1798,7 +1798,7 @@ I spent a few minutes finding a tutorial to get the SD Card to work, but it real
 
 # 4/12/2026 9 PM - Made SIM7080G Library  
 
-Total time spent: 3.0h_  
+_Time spent: 3.0h_  
 
 Yep. Took me some three hours to debug this thing, but it's there now.
 
@@ -2105,7 +2105,7 @@ class Cell(object):
 
 # 4/13/2026 8 PM - Re-organised Files, Worked on a More Intuitive On/Off  
 
-Total time spent: 0.4h_  
+_Time spent: 0.4h_  
 
 Basically, I just, one at a time, copied the files and put them into new folders so that they are actually nice!
 
@@ -2188,7 +2188,7 @@ Btw I did some debugging for a future journal, and oh boy does the simpler versi
 
 # 4/13/2026 10 PM - New Tracking Code +  
 
-Total time spent: 2.6h_  
+_Time spent: 2.6h_  
 
 Yep, I got this sweet new tracking code that is soooooo much simpler and as I'm redoing everything much easier to use and see.
 
@@ -2378,7 +2378,7 @@ I also published all my ESP32 firmware to github!
 
 # 4/14/2026 11 AM - Fixed Old Code to Work Better  
 
-Total time spent: 0.5h_  
+_Time spent: 0.5h_  
 
 Basically, I adjusted the timing so that the esp32 would boot up and, as I'm in a big conctrete structure, if it doesn't see enough satelites it will just send battery data and tell me how many sats it sees (if any)
 
@@ -2395,7 +2395,7 @@ I finally got some real photos!
 
 # 4/14/2026 8:18 PM - GUI  
 
-Total time spent: 0.7h_  
+_Time spent: 0.7h_  
 
 So, I want to have a nice little GUI, so I was thinking of using LVGL, as @sasha recommended.
 
@@ -2406,7 +2406,7 @@ The problem is, however, that I have to get it to work by building micropython f
 
 # 4/14/2026 8:22 PM - Taking my tracker for a trip (1/2 hours counted)  
 
-Total time spent: 0.5h_  
+_Time spent: 0.5h_  
 
 So, to really test my tracker out, I took it out for a trip on the train!
 
@@ -2420,7 +2420,7 @@ one is longitude, the other is latitude.
 
 # 4/14/2026 9 PM - Finalized Tracking Code; Started Normal Run Code  
 
-Total time spent: 0.7h_  
+_Time spent: 0.7h_  
 
 Yep, I just did that.
 
@@ -2481,7 +2481,7 @@ Time to swap it out.
 
 # 4/14/2026 10 PM - TFT Stuff  
 
-Total time spent: 1.3h_  
+_Time spent: 1.3h_  
 
 I spent the last half-hour just tuning and finding a good color for the foreground and background, and I settled on 0xEE55 (rgb565) for the front and rgb(8,0,8) for the back.
 
@@ -2535,7 +2535,7 @@ the light yellow ^^
 
 # 4/15/2026 10:04 PM - Cooked Up Micropython, Font Errors, Implementation  
 
-Total time spent: 8.6h_  
+_Time spent: 8.6h_  
 
 Ok, so first thing's first, I decided that I want micropython. _Custom_ micropython. Thankfully for me, my driver's repo tells me exactly how to compile it.
 
@@ -2685,7 +2685,7 @@ y'know it is kinda sad that I'm going to be submitting today, and well yeah uh I
 
 # 4/15/2026 10:20 PM - testing 123  
 
-Total time spent: 0.5h_  
+_Time spent: 0.5h_  
 
 ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss i can journal???????????
 ![image](https://blueprint.hackclub.com/user-attachments/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTM1MDA0LCJwdXIiOiJibG9iX2lkIn19--3a8a3fdc71630106296e453e32fb94e7ec8255d5/image.png)
@@ -2693,7 +2693,7 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
 
 # 4/17/2026 - Spent an Hour Looking At LVGL & STM32 USB & Tracking  
 
-Total time spent: 1.5h_  
+_Time spent: 1.5h_  
 
 Y'know, the limit for the characters in the title really is pretty sad...
 
@@ -2760,7 +2760,7 @@ and implementation:
 
 # 4/18/2026 8 PM - Worked On Power Saving  
 
-Total time spent: 2.5h_  
+_Time spent: 2.5h_  
 
 I did a bunch of experimentation, and here are the numbers for idling.
 
@@ -2790,7 +2790,7 @@ I'm now going to try and get `asyncio` to work so that the SIM7080G only turns o
 
 # 4/18/2026 10 PM - Worked on Getting Battery % and Voltage  
 
-Total time spent: 3.0h_  
+_Time spent: 3.0h_  
 
 So, I got it to work but it has a really weird jiggy thing in the beginning where it just takes a bunch of time.
 
@@ -3072,7 +3072,7 @@ I might also add the AT one as it really would be nice to async it...
 
 # 4/19/2026 - Fixed Glitch,  Async'd Code, MQTT and Safe Power, New Fonts.  
 
-Total time spent: 6.5h_  
+_Time spent: 6.5h_  
 
 Gods, the 60 char title limit is annoying.
 
@@ -3202,7 +3202,7 @@ Y'know, the biggest reason I decided to actually do this was because I've now ov
 
 # 4/21/2026 - Got TOUCH TO DETECT!!!! &tracking  
 
-Total time spent: 2.8h_  
+_Time spent: 2.8h_  
 
 Here's the furthest I got to:
 
@@ -3241,7 +3241,7 @@ Again, to not bore you and for the interest of time (and my forgetting-ness) I h
 
 # 4/22/2026 - Fixed GPS Tracking issue.  
 
-Total time spent: 0.2h_  
+_Time spent: 0.2h_  
 
 As far as I can tell, for the past some ~30 hours I've been running it, and not once has it given me a '0' and so I can now be confident that its working properly!!!
 
@@ -3256,7 +3256,7 @@ Previously, I'd sometimes have a '0' in one but not the other, and this seems to
 
 # 4/24/2026 2 PM - Spent ~2 ½ hours debugging a 13ms delay.  
 
-Total time spent: 3.0h_  
+_Time spent: 3.0h_  
 
 So I had this really big problem that my loop was taking 13ms longer than I wanted to and it literally made negative sense.
 
@@ -3290,7 +3290,7 @@ Next up, I'd like to get the position from I2C, as just like last time all I can
 
 # 4/24/2026 4 PM - Got Touch To Work!  
 
-Total time spent: 1.5h_  
+_Time spent: 1.5h_  
 
 Yep, now the STM32 is able to detect the touch!
 
@@ -3329,7 +3329,7 @@ For the picture, I present you:
 
 # 4/24/2026 5:00 PM - New print function  
 
-Total time spent: 0.1h_  
+_Time spent: 0.1h_  
 
 I forgot to put this in my journal about debugging like 2 ago, but I also build a new print function.
 
@@ -3367,7 +3367,7 @@ I pretty much already counted the hours in that journal, fyi.
 
 # 4/24/2026 5:40 PM - Updated Github with detailed descriptions  
 
-Total time spent: 0.2h_  
+_Time spent: 0.2h_  
 
 I did exactly that, for everything adding descriptions, such as 'updated libraries' or 'added old main file'
 
@@ -3378,7 +3378,7 @@ characters characters characters character
 
 # 4/24/2026 6 PM - Got ready to set up SPI Pins  
 
-Total time spent: 0.3h_  
+_Time spent: 0.3h_  
 
 I migrated the `update` pin from one of the SPI pins to just be the shutdown signal as during an update the shutdown signal is not processed.
 
@@ -3391,7 +3391,7 @@ New code:
 
 # 4/25/2026 10 AM - GOT SPI TO WORK FIRST TRY!!!! + spent a few hours vibecoding  
 
-Total time spent: 3.2h_  
+_Time spent: 3.2h_  
 
 Yep! Just real quick got gpt to vibecode me a simple script that sets up SPI on the ESP32, and sets it up for recieving. I also made it vibecode a script for the STM32 so that it just keeps sending "O" (capital 'o').
 
@@ -3494,7 +3494,7 @@ Note for reviewer: This journal took about 27 minutes to complete. This journal 
 
 # 4/25/2026 4:07 PM - spent two hours fixing a problem that required just one line  
 
-Total time spent: 2.7h_  
+_Time spent: 2.7h_  
 
 Oooooh 60/60 chars!!!
 
@@ -3621,7 +3621,7 @@ Here's the relevant code.
 
 # 4/25/2026 4:11 PM - the line that i fixed  
 
-Total time spent: 0.1h_  
+_Time spent: 0.1h_  
 
 In case it wasn't clear or anything, here's what it was.
 
@@ -3638,7 +3638,7 @@ whereas is was
 
 # 4/26/2026 - Started Adding Wifi Support & Optimised Boot Order  
 
-Total time spent: 1.5h_  
+_Time spent: 1.5h_  
 
 Let's get the quick one out of the way: I real quick adjusted the timing of things so that it wouldn't import the unnecessary things, and the TFT would be initialized earlier making it easier seen that the board turned on.
 
@@ -3869,7 +3869,7 @@ if __name__ == '__main__':
 
 # 5/1/2026 4:27 PM - [Retro] Wifi transmission (not quite good yet but works!  
 
-Total time spent: 1.4h_  
+_Time spent: 1.4h_  
 
 In case it isn't clear, this is a retro journal of my work on getting the wifi based MQTT updating started, but not yet fully functional.
 
@@ -3950,7 +3950,7 @@ Here's what an update looks like:
 
 # 5/1/2026 4:41 PM - WEB DEV!  
 
-Total time spent: 3.5h_  
+_Time spent: 3.5h_  
 
 Now, you may be wondering why I'm doing web dev.
 
@@ -3990,7 +3990,7 @@ Note: to see the version that is as of journaling you might have to log in and e
 
 # 5/1/2026 10 PM - MQTT Library  
 
-Total time spent: 6.0h_  
+_Time spent: 6.0h_  
 
 So I pretty much finished the work and testing of the publish side of the MQTT library, which basically provides an integration between both the wifi and cell layers, and this required a bit of change to those libraries, plus making the entirety of the MQTT library.
 
@@ -4146,7 +4146,7 @@ Alright well in total this took about 25 minutes to journal. Time really does fl
 
 # 5/2/2026 - Implemented MQTT Library, learned about QOS  
 
-Total time spent: 2.3h_  
+_Time spent: 2.3h_  
 
 ### MQTT
 
@@ -4225,7 +4225,7 @@ I spent some time researching what QOS really does in the MQTT context, and as i
 
 # 5/3/2026 - Fixed up MQTT Edge Cases  
 
-Total time spent: 0.1h_  
+_Time spent: 0.1h_  
 
 So I woke up to see my board glitching out angrily. Hmmmm when did it go down? To check, I'd have to use the internet, but for some reason the internet was out... Hmmmmmmmmmmm
 
