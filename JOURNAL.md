@@ -4304,4 +4304,9 @@ I will admit this doesn't look like an hour job, but you don't understand how te
 
 [This lapse](https://lapse.hackclub.com/timelapse/I8IFTq0RHuYB) will only show you part of the story 'cause I'm sorta cooked and deleted half of it by switching the camera or smth.
 
-Time spent: 50 minutes.
+
+Ok, fine, fine I'll explain.
+
+See, the problem is that python comments always start with # and you'll see my journal has a lot of python code, so I had to edit all of those and it really isn't fun to go arround reading up how to do it and all and of course I had to like import it and get jumpscared and stuff when I saw the 500+ hours. As we all know, debugging takes forever, especially if it isn't your code...
+
+Total time spent: 50 minutes
