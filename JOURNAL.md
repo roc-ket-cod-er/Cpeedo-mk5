@@ -2196,30 +2196,30 @@ Yep, I got this sweet new tracking code that is soooooo much simpler and as I'm 
 
 is as follows:
 ```
-# Important Imports
+ # Important Imports
 from machine import Pin, UART
 
-# Prevent Automatic Shutdown / Comms
+ # Prevent Automatic Shutdown / Comms
 stm_com = Pin(43, Pin.OUT)
 stm_com.off()
 
-# Imports
+ # Imports
 from sim7080g import Cell
 from gps import GPS
 from time import sleep_ms
 
-# Check if boot was for tracking or for 
+ # Check if boot was for tracking or for 
 track_pin = Pin(9, Pin.IN)
 TRACK = True# if track_pin.value() else False
 
-# Simpler swap-ins to help simplify typing
+ # Simpler swap-ins to help simplify typing
 ms = "ms"
 
-# initialize objects
+ # initialize objects
 cell = Cell()
 gps = GPS()
 
-# Function Defines
+ # Function Defines
 
 def shut_down():
     stm_com.on()
@@ -2249,7 +2249,7 @@ def track():
         cell.send_message(f"NO LOCK: {my_gps.satellites_in_use}s {my_gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-5]}mV)", feed='other-info')
     
     cell.off()
-# Main
+ # Main
 
 def main():
     if TRACK:
