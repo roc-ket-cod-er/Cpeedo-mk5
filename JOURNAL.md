@@ -3647,7 +3647,7 @@ In addition, I cleaned up the main code with the addition of clear section label
 ```
  # -------------- Function Defines ---------------- #
 
-# To shut everything down
+ # To shut everything down
 def shut_down():
     ...
     
