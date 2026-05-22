@@ -85,8 +85,7 @@ However, on the front side I got feed back that the silkscreen was just a bit to
 
 ![image](https://blueprint.hackclub.com/user-attachments/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTEzODI1LCJwdXIiOiJibG9iX2lkIn19--2983039ad083fb814c9cfffe7afcb6c74d61ba82/image.png)
 
----
- The hard part
+### The hard part
 
 So that was all good, just a bit of easy artwork. But, the stiching vias were _really_ bad this time, as for some reason the DRC was allowing the vias to be placed too close to each other, and then flagging them. So, I had to go through and remove each violating via by hand... (Some 50~60 vias)
 
@@ -98,8 +97,7 @@ Anyways, after that, there was the headers for the speed and 2 IO (buttons, etc)
 
 ![image](https://blueprint.hackclub.com/user-attachments/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTEzODMxLCJwdXIiOiJibG9iX2lkIn19--0faac41bfa59799ce6ec8cb7701ab7eab49ab23a/image.png)
 
----
- Debug Header
+### Debug Header
 
 Reddit said that I should add the NRST pin broken out on the debug header, so that's what I did.
 
@@ -129,8 +127,7 @@ As you can see, the majority of the lines look alr, and I might actually just ch
 
 The biggest problem, however, is the fact that this is already the most dense part of the board, where the four layers are most full, so wiring an addition ~16 lines is not going to be fun. Thankfully, if absolutely need be, I can always use inner 4, which is supposed to be GND only...
 
----
- Some Time Later
+#### Some Time Later
 
 Ok! I think I've settled on this setup for the pins:
 
@@ -140,8 +137,7 @@ Ok! I think I've settled on this setup for the pins:
 
 Now time to route this all...
 
----
- ~~Routing~~ More double checking!
+### ~~Routing~~ More double checking!
 
 Here's (hopefully) the final thing.
 
@@ -151,8 +147,7 @@ Here's (hopefully) the final thing.
 
 _Now_ it's time for some routing
 
----
- Routing
+### Routing
 
 (some time later)
 
@@ -274,8 +269,7 @@ Oh well, also two more notes:
 1. THE PCB IS DONE PRODUCTION!!! (Now all I have to do is wait for them to assemble it!)
 2. I noticed that I can arrange the screens in a better way that should look better, And thus I'm thinking of completely remodling my entire thing... I should get that done real quick so that its done by the time the PCB arrives and I can just go print it and worry about debugging my PCB
 
----
- NOTE: As you can see, this is a really long journal, and really long journals take a tonne of time to get done on their own ...  
+### NOTE: As you can see, this is a really long journal, and really long journals take a tonne of time to get done on their own ...  
 
 # 3/11/2026 - Re-3D modelling  
 
@@ -398,8 +392,7 @@ _Time spent: 3.7h_
 
 yep, that's what I did.
 
----
- Firstly, there is the top side:
+### Firstly, there is the top side:
 
 ![image](https://blueprint.hackclub.com/user-attachments/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTIyMDQyLCJwdXIiOiJibG9iX2lkIn19--1edf0735ca052ca9b612dda0468d53fd111372d2/image.png)
 
@@ -409,8 +402,7 @@ There is nothing for it to dig into.
 
 ![image](https://blueprint.hackclub.com/user-attachments/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTIyMDQzLCJwdXIiOiJibG9iX2lkIn19--0819fc9b2dd0e007d169effe29716476387eab0c/image.png)
 
----
- Back Side:
+### Back Side:
 
 Here it is:
 
@@ -420,8 +412,7 @@ Here it is:
 
 This all required me to cut out the bottom plate so that the screws can fit, as there is really only one screw type that is going to be used in all the holes.
 
----
- The hard part: PCB Mount
+### The hard part: PCB Mount
 
 When looking here, its hard to see:
 
@@ -437,8 +428,7 @@ s o o o o o o o o o . l o n g .
 
 They kept on giving me errors, and all that nonsense. At least I didn't have to chamfer these holes.
 
----
- Chamfering
+### Chamfering
 
 If you looked really closely, you'd see the chamfering:
 
@@ -509,8 +499,7 @@ Most importantly, I got the CELL STUFF TO WORK!!!
 
 But anyways, the story
 
----
- Soldering
+### Soldering
 
 Firstly, there was the soldering.
 
@@ -544,8 +533,7 @@ Alls well, though, and it just worked.
 
 Next up, the switch.
 
----
- Stupid Switches
+### Stupid Switches
 
 Don't you just love alliteration.
 
@@ -557,8 +545,7 @@ It took me so long to get the wits to actually bother to check the resistance an
 
 Well, whatever, it works it works.
 
----
- Coding & Cell
+### Coding & Cell
 
 Ok, now the sad part.
 
@@ -660,8 +647,7 @@ I also set it up with the DTS and RTS commands, so that if I want higher bauds, 
 
 Furthermore, I re-setup the UART, as previously there was a built in slowing function, adding about 1 second to every read.
 
----
- HTTPS
+### HTTPS
 
 ~~So this part was just like the others~~
 
@@ -679,16 +665,14 @@ So as you can see, my current connection function asks whether I want to connect
 
 Once I figured that out, it was quite easy, really. Just make sure to disconnect, and all should be well.
 
----
- The Pain
+### The Pain
 
 So, I decided that I was going to clump the functions and clean them up so that it won't waste time and data connecting to the MQTT if I wanted the HTTP, and vice versa. So, I put the code in and it just didn't work. I debugged it for a solid _hour_ and I finally found the problem. I had commented out the lines of code that told my modem how much of a buffer to assign to the read function, and voilà, nono functioning.
 ![image](https://blueprint.hackclub.com/user-attachments/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTI0NjExLCJwdXIiOiJibG9iX2lkIn19--4b147ad8e51f40adb8945a8f90ebc1e20939dc68/image.png)
 
 Uncommenting those lines pretty much fixed the entire problem, and yeah.
 
----
- 3D printing
+### 3D printing
 
 I went to the library today to see if they had a printer open, and, even in this weather (its raining/cold), there was not a printer (out of 2) that was open.
 
@@ -763,8 +747,7 @@ So I got this lovely error:
 MemoryError: memory allocation failed, allocating 153600 bytes
 ```
 
----
- New Library
+### New Library
 
 Ok, well the official waveshare one didn't work, so I thought of just googling the chip, the ST7789T3. And right there, I found the [ST7789](https://github.com/russhughes/st7789_mpy) Library, something that I have even used before!
 
@@ -856,8 +839,7 @@ Uhh no actual there was also one small other thing.
 
 Anyways, here's my list of errors, after spending like an hour trying to force my brain to understand how the font generation works. By the way, it doesn't help that the docs and everything are pretty much non-existent and really old.
 
----
- #1 Wrong function: I used monofont2bitmap, which isn't compatible, whereas font2bitmap is. ????????
+### #1 Wrong function: I used monofont2bitmap, which isn't compatible, whereas font2bitmap is. ????????
 
 I still had to debug it to give me an output, which included installing a library, finding out it was too new and didn't have some functions, vibecoding a fix, and just wondering why????
 
@@ -867,15 +849,13 @@ Spent far too long trying to see why it kept giving a (seemingly) random error, 
 
 And after all that, I was wondering why the write function was failing. Firstly, it was because of using the wrong function (more later) and because this function gives an incompatible bitmap. How nice.
 
----
- #2 Right function, wrong writing method
+### #2 Right function, wrong writing method
 
 So, I go in and use the `text` function, as I've always done, and it throws a random error. No clue why. ChatGPT gives me the right answer, but I thought it was hallucinating. So, digging through the very outdated docs, I actually find it! The correct function was the `write` one.
 
 and that pretty much would have fixed it, if not for me being in the wrong file
 
----
- #3 Wrong File:
+### #3 Wrong File:
 
 So like it should be really hard to edit the wrong file, right?
 
@@ -1031,8 +1011,7 @@ I also suspected that the wind, which was easily gusting to ~50km/h was also per
 
 So, I started noticing that, at the 3km mark, the screen was wobbling enough that the battery clip (which's spring conducted so much power that it shorted together [this was when I accidentally shorted the antenna to the power pin]) was starting to give way at some times, resulting in the cell chip losing power without it shutting down. The datasheet clearly says not to do that as it might corrupt its software, and thus I thought of turning around. However, as I had already scaled the uphill and the upwind part, I didn't feel like undoing all my progress. I thought that I'll just go slower, feel less bumps, and continue on.
 
----
- I continued on to the 5~6 km mark, and disaster struck.
+#### I continued on to the 5~6 km mark, and disaster struck.
 
 It was on a downhill, with the wind helping me, and even though I was trying to go slow I was probably clocking 20 to 25 km/h. And it was here that all three screws stripped. And the entire assembly, screens-first, fell onto the asphalt.
 
@@ -1044,8 +1023,7 @@ Occasionally, I would take the risk and get on my bike, but everytime the wind b
 
 Thankfully, after getting home, I was able to test it and confirm that all functions work.
 
----
- JOURNALLED TIME
+### JOURNALLED TIME
 
 As this included coming back home, I will **_NOT_** be logging that time, but the going there (testing) time and assembly is be logged. Journaling took 30 minutes. (I am not kidding I seriously write really detailed stuff.
 
@@ -1307,8 +1285,7 @@ Just a reminder that changing code on the STM32 requires putting in to flash mod
 
 After this, I worked on the anti-theft stuff, which took most of my time.
 
----
- Anti-Theft stuff
+### Anti-Theft stuff
 
 So, to track if it has been stolen, my plan is pretty simple. Every 10 or so minutes, wake it up, send the exact location to my MQTT broker, and tada. I can track exactly where the tracker is.
 
@@ -1385,8 +1362,7 @@ I'm probably missing something, but I really can't spend anymore time journaling
 
 _Time spent: 1.0h_  
 
----
- [DEMO!!!!](https://youtube.com/shorts/DLDQR-w_GeQ)
+### [DEMO!!!!](https://youtube.com/shorts/DLDQR-w_GeQ)
 
 Yep, I think I got it done. Took me a bunch of time for me to assemble all ~30 screws, but hey, take a look ^^^
 
@@ -1587,15 +1563,13 @@ Anyways, the point is I spent two and a half hours for yet another failed attemp
 
 I was actually confident this time ): ):  :( :(
 
----
- Next Steps
+### Next Steps
 
 Well, I have one last thing that I can try, and that is to get USBX to actually work, as it is the only one that is still natively supported by STM32CUBEMX, and thus I somehow managed to find [this video: https://www.youtube.com/watch?v=43gcc2dGnxQ](https://www.youtube.com/watch?v=43gcc2dGnxQ)
 
 If this works I guess that would be one heck of a way to go out: struggling to find something so obvious, just like the beginning (with the cell chip, in case (like me) you forgot.
 
----
- AS I LOG MY 246th HOUR, I must really reflect upon how great of a journey this has been, from a dream some 6 months ago to fruition. (And pretty much everything I designed worked spectacularly!)  
+### AS I LOG MY 246th HOUR, I must really reflect upon how great of a journey this has been, from a dream some 6 months ago to fruition. (And pretty much everything I designed worked spectacularly!)  
 
 # 4/11/2026 12:08 PM - Made New STM32 Files & Project  
 
@@ -1640,8 +1614,7 @@ Maybe I'll just add a print function, but otherwise I'm done. I'm actually done.
 
 Anyways, I'm getting ahead of myself.
 
----
- The Process.
+### The Process.
 
 So I followed that tutorial that I talked about last time, and I actually came to a problem in pretty much the same spot as some other tutorial I did.
 
@@ -1674,8 +1647,7 @@ IT JUST WORKED!!
 
 On a side note, I guess it really is true that the more effort you put into something the better it feels when it works...
 
----
- Testing & 8-Bites
+### Testing & 8-Bites
 
 So yeah once everything got to work (~1h40) I then spent the remaining time trying everything in my power to fix the 8-Bite rule.
 
@@ -1693,8 +1665,7 @@ If only it were that easy, ofc.
 
 It wasn't. And thus I have no solution. My best bet as of now is just to create a print function that will just make it print 8 bites at a time. Oh well... At least the USB works...
 
----
- Learning C++ Arrays & springf
+### Learning C++ Arrays & springf
 
 So, in the debugging process, I thought that I would make it just print a combination of the length it received and the message. i.e, 3: hi
 
@@ -1742,8 +1713,7 @@ However, for whatever stupid reason, they way I had set it up was to print like 
 
 ![Screenshot 2026-04-12 134337](https://blueprint.hackclub.com/user-attachments/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTM0NTk0LCJwdXIiOiJibG9iX2lkIn19--419b5204c3db2659dbc9168c1b0c974eba020706/Screenshot%202026-04-12%20134337.png)
 
----
- And this really triggered my brain.
+#### And this really triggered my brain.
 
 The thing is, I had forgotten to turn the INA226 on.
 
@@ -1751,15 +1721,13 @@ Yep. The INA226 draws power from an STM32 IO, and since that was off, well of co
 
 So, I turn it on and ...
 
----
- It still doesn't work.
+#### It still doesn't work.
 
 For whatever reason, I'm getting 255000 back from it. This is where I realize that I was giving it the wrong I2C handle (after accidentally pasting the code in the GPT) I fix that, ... and, ... nothing.
 
 See, because the return value that the INA226 gives is a float, and my print function can't take floats, I had been converting it into an int. Thus,
 
----
- My Code Story
+### My Code Story
 
 My code looked like:
 
@@ -1799,8 +1767,7 @@ I'm getting outputs that are around the 3200 range ... but I measure my battery,
 
 Huh, how weird.
 
----
- Scalers
+### Scalers
 
 So the thing is, apparently the library just straight up forgot to put in the scalers, where the resolution for the voltage is *1.25, and the current is *2.5
 
@@ -1844,8 +1811,7 @@ Of course, it wouldn't be calle `test`, but this was just a test so...
 
 Anyways, here are the major hiccups I faced:
 
----
- Major Hiccups
+### Major Hiccups
 
 1. New UI, Same Brain
 2. Weird Ordering
@@ -1854,8 +1820,7 @@ Anyways, here are the major hiccups I faced:
 
 In order:
 
----
- New UI, Same Brain
+#### New UI, Same Brain
 
 The first and biggest thing is that my new thing is much simpler, and just much easier to use. However, my brain is used to the older way of thinking, so that really messes with me.
 
@@ -1879,8 +1844,7 @@ In addition, I also made my code to be that there were tonnes of options for the
 
 ![image](https://blueprint.hackclub.com/user-attachments/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTM0NjEwLCJwdXIiOiJibG9iX2lkIn19--0a296950431650230d55aae316b16727810fc397/image.png)
 
----
- Weird Ordering
+#### Weird Ordering
 
 Here's a snippet of my code for context:
 ```
@@ -1922,8 +1886,7 @@ The biggest reason this could be is because I really tightened up some timings, 
 
 This really did take me a while for some reason, probably because it was a (mostly) copied part of it that I expected it would work.
 
----
- Thonny Being A Big Dumb-Dumb-Bell
+### Thonny Being A Big Dumb-Dumb-Bell
 
 So yeah, as useful as Thonny is (my really basic IDE that does not support hackatime or any other extensions), there is this big problem that it kept. on. hallucinating.
 
@@ -1935,13 +1898,11 @@ The thing was, that error was exactly correct, just for a problem that was _TEN 
 
 I literally questioned my python (and thus coding) skills several times during the debugging.
 
----
- Last point: Secrets
+### Last point: Secrets
 
 This is just a feature I added, so that every time I publish to github I'm not giving away my secret information, I just made a secrets file that contains my IO key, my username and the device name.
 
----
- My complete code.
+### My complete code.
 
 Because you might be wondering what did I do in these three hours, take a look!
 
@@ -2231,30 +2192,34 @@ _Time spent: 2.6h_
 
 Yep, I got this sweet new tracking code that is soooooo much simpler and as I'm redoing everything much easier to use and see.
 
----
- My code
-
-COMMENTS CANNOT BE SHARED AS IT BREAKS FORGE.
+### My code
 
 is as follows:
 ```
+# Important Imports
 from machine import Pin, UART
 
+# Prevent Automatic Shutdown / Comms
 stm_com = Pin(43, Pin.OUT)
 stm_com.off()
 
+# Imports
 from sim7080g import Cell
 from gps import GPS
 from time import sleep_ms
 
+# Check if boot was for tracking or for 
 track_pin = Pin(9, Pin.IN)
 TRACK = True# if track_pin.value() else False
 
+# Simpler swap-ins to help simplify typing
 ms = "ms"
 
+# initialize objects
 cell = Cell()
 gps = GPS()
 
+# Function Defines
 
 def shut_down():
     stm_com.on()
@@ -2284,6 +2249,7 @@ def track():
         cell.send_message(f"NO LOCK: {my_gps.satellites_in_use}s {my_gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-5]}mV)", feed='other-info')
     
     cell.off()
+# Main
 
 def main():
     if TRACK:
@@ -2310,8 +2276,7 @@ Why the funkyness?
 
 Because, I developed
 
----
- A New GPS Library
+### A New GPS Library
 
 Ok, not quite. What I basically did was just create an inner layer that will basically take in commands, and then output them in a nice way, while giving me control to change something at every step of the way.
 
@@ -2599,8 +2564,7 @@ https://chatgpt.com/share/69e02d6d-0760-83ea-87d5-00eaa9fc94e4
 https://chatgpt.com/share/69e02d82-9840-83ea-be03-a4d5e1230b30
 https://chatgpt.com/c/69dfeba4-845c-83ea-ab5d-1049f9765772
 
----
- Reflashing Mishaps
+### Reflashing Mishaps
 
 So remember how I said that I messed up the compilation and it messed it up and stuff? Well thankfully, I had taken a back up of my files, but it lost all its organization, and thus gave me so much trouble.
 
@@ -2612,8 +2576,7 @@ uggggggggggggggggggggggghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 
 I really wanted it to work before I submitted it :(
 
----
- Current Micropython Building
+### Current Micropython Building
 
 Ok, so just leaving that all out, I'm going to try building the micropython as the LVGL directory says, and see what happens...
 
@@ -2645,8 +2608,7 @@ getting the usb to find and flash was a bit of a hassle, but it actually worked!
 
 (I unflashed it now to use my old code again though)
 
----
- UI and Other Micropython Stuff
+### UI and Other Micropython Stuff
 
 So, I spent a good chunk of time trying to display text. If you recall, some time ago I made custom fonts so that I can have _really_ big text.
 
@@ -2717,8 +2679,7 @@ They aren't being used as of now.
 
 I also fine tuned where the decimal speed is now. (And of course added it in the first place) It still does feel weird though.
 
----
- NOTE
+### NOTE
 
 y'know it is kinda sad that I'm going to be submitting today, and well yeah uh I would absolutely love to continue to work on this, maybe for some other ysws or just on my free time. I'm thinking that I will just continue to journal my time over on a google doc and you (the reviewer) can chose to add those hours. Please give me a note if you do so that I don't double dip. I really do want to finish with it working tho... GOOGLE DOC: https://docs.google.com/document/d/1c-lNGmR0YAwbqmByu39EthkbhZPvO9BD816Yln8PGi8/edit?usp=sharing  
 
@@ -2746,15 +2707,13 @@ Anyways, next! (I know that I'm just skimming over it, but there really isn't mu
 
 ---
 
----
- C
+### C
 
 I lowk am just thinking that I might just re-write my code to run with the arduino IDE as it should actually work and that way I can use the display with LVGL. I really don't want to rewrite my code again (not quite done, but almost for my 2nd iteration)
 
 ---
 
----
- STM32 USB
+### STM32 USB
 
 For some reason, my STM32 is drawing a tonne of current, about 5mA, and I really need to get that down. Currently, it lasts for about 5 days or so per battery for just tracking, as the average power draw is 20mA, 5mA + 160 mA for ~25 seconds multiplied by 12 times an hour.
 
@@ -2823,8 +2782,7 @@ I'm still shocked that its drawing ~4.6mA just sitting there.
 
 ---
 
----
- Main Code
+### Main Code
 
 I also worked on developing the main code, so much so that I think it's all set, and I'm now just making the main file import the new code and run it.
 
@@ -3154,8 +3112,7 @@ I really had a mess with all the power on, battery fetching, and shut off codes 
 
 ---
 
----
- Awaiting
+### Awaiting
 
 Getting that to work was also quite something as I may have mentioned before, but everything sort of went quite well other than the hiccup above.
 
@@ -3219,20 +3176,17 @@ aconnect:
             print(self.is_connected, "connected, iirc")
 ```
 
----
- Data Use
+### Data Use
 
 Since I've updated it to update the server its started to draw and alarming 0.5mb per day, which brings the per day cost to around 3.5¢. Per year, that's about 10 dollars. Ideally, I'm going to find a way to really lower that...
 
----
- Fonts
+### Fonts
 
 I also took a look at the script again and generated some new fonts so that everything would be far more legible.
 
 I also made the battery percentage be green above 30% and red below.
 
----
- Auto Shutdown
+### Auto Shutdown
 For when the battery is dying
 
 ![image](https://blueprint.hackclub.com/user-attachments/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTM1MjQ0LCJwdXIiOiJibG9iX2lkIn19--2298254ac558193c4ef07f0fa68156acd72cc605/image.png)
@@ -3476,8 +3430,7 @@ What this basically did was just have two bytes to tell me what the number was. 
 
 And, believe it or not, it just straight up worked. Now, of course, like all my work, it is quite glitchy and doesn't work as nicely as I'd like for it to, but hey at least I can (most of the time) get the x/y coordinates to the ESP32!
 
----
- Code
+### Code
 
 Here's the code I ended up with for the ESP32:
 
@@ -3523,8 +3476,7 @@ It's quite simple, just setting up SPI to match the STM32, and then just reading
 
 It then just prints the raw bytes, and if for whatever reason you can actually print the numbers as text, it will. This is just mainly residual code from before. The STM32 just default sends 'Hello' unless there has been a touch, so that's also something to keep in mind.
 
----
- Example
+### Example
 
 This is just a sample screenshot from the output of the ESP32.
 
@@ -3559,8 +3511,7 @@ In hindsight, there were also some other solutions I had, such as:
 1. Using DMA/Interrupt for I2C
 2. Stop looking for the interrupt.
 
----
- SPI DMA
+### SPI DMA
 
 So I decided I'm not going to use GPT, so you'll see I haven't even opened it today.
 
@@ -3614,13 +3565,11 @@ And I can confirm, it does work.
 
 Now for my data, if it starts with a zero its the point where my finger lifted off, and if it starts with a 255 its where my finger is right now!
 
----
- Corruption
+### Corruption
 
 So I was having this really weird problem where my stuff would get corrupted, and somehow increasing the baud rate to 1 MHz seemed to fix it. I also made a bunch of checks to see if it was ok, and here's my final code on the ESP32 side! Getting all these checks and timing an stuff did take longer than I'd admit, as it really is just a fine-tuning exercise.
 
----
- CODE!
+### CODE!
 
 ```
 def read_bytes():
@@ -3710,8 +3659,7 @@ def track():
 ```
 ![image](https://blueprint.hackclub.com/user-attachments/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTM1NjAxLCJwdXIiOiJibG9iX2lkIn19--ad3bacf09bb2e29b12f86290f7922f378d4bff42/image.png)
 
----
- Wifi
+### Wifi
 
 So, I was looking at how much data this uses, and it's about 0.7mb per day or ~2¢ plus the daily connection fee of ~2¢, so I was thinking of setting up something to just use wifi if any known network is around to transmit, and then creating a library that would just handle everything, and interface with a new Wifi library and my existing Sim7080G Cell library.
 
@@ -3729,8 +3677,7 @@ So, the first thing I did was, naturally, unsuccessfully try to take it apart an
 
 ---
 
----
- Wifi connection.
+### Wifi connection.
 
 Next, I worked on getting the wifi connection thing to actually just like connect to the strongest signal, but only try to connect if it actually had credentials for it.
 
@@ -3928,8 +3875,7 @@ In case it isn't clear, this is a retro journal of my work on getting the wifi b
 
 I'll continue work once I finish this.
 
----
- WIFIFIFIFI!!!
+### WIFIFIFIFI!!!
 
 So yeah if you look at my work (that should be going up to github right about now), I've got some basic MQTT-ing going on, but as they are in individual libraries they aren't quite as useful as everything will be once I finish tonight, but I really had to get my data usage down, as 3~4¢ per day was adding up quickly.
 
@@ -4056,8 +4002,7 @@ It has some code in the `__init__` function that actually took me quite a while 
 
 ---
 
----
- The `init()` function
+### The `init()` function
 
 Let's start off with it, here it is:
 
@@ -4185,8 +4130,7 @@ There was this thing though that it would just end up creating a new test feed b
 
 Next up,
 
----
- AttributeError: 'NoneType' object has no attribute 'write'
+### AttributeError: 'NoneType' object has no attribute 'write'
 
 This one really stumped me.
 
@@ -4204,8 +4148,7 @@ Alright well in total this took about 25 minutes to journal. Time really does fl
 
 _Time spent: 2.3h_  
 
----
- MQTT
+### MQTT
 
 Firstly, I worked on implementing the new MQTT library in, but there's this problem.
 
@@ -4273,12 +4216,10 @@ The rest is just getting a lock and checks.
 
 ^^ you'll see it still works ^^
 
----
- STM32 Code Update
+### STM32 Code Update
 I just ran a simple code update to quickly make it so that the code gives the update function 90s now and so that the STM32 just resets the ESP32 if it is updating to make sure the user doesn't have to wait anything more than necessary.
 
----
- QOS
+### QOS
 
 I spent some time researching what QOS really does in the MQTT context, and as it turns out giving a qos of one makes the function blocking and ensures that the server receives the message. Thus, I made it so that it would no longer `await` for 1500 ms arbitrarily, but now it will just set QOS=1 and so it will just block that script until the message is successfully sent for the important stuff, and for the not-important runtime stuff it won't bother blocking and stuff. (Especially because the SIM7080G just has its own methodology and stuff and that will be used 99.9% of the time.)  
 
@@ -4325,8 +4266,7 @@ Since `wifi.aconnect` already returns True/False whether or not it's connected, 
 
 That's one edge case down! After some more testing, I came across another edge case.
 
----
- Edge Case #2 Incorrect Password
+### Edge Case #2 Incorrect Password
 
 There is also this other thing that can happen, if by some chance you happen to come across another ssid with the same name or if you have the wrong password. In this case it will just end up hanging forever and that will really not be good, so instead I've made it have a timeout option.
 
