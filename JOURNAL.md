@@ -2824,46 +2824,46 @@ Really nice to know what everything is doing, even if they are a bit over the to
 Here's my entire main.py code. For the other libraries you can check out the github, which is now updated quite frequently.
 
 ```
-# Important Imports
+ # Important Imports
 from machine import Pin, UART, freq
 
-# Prevent Automatic Shutdown / Comms
+ # Prevent Automatic Shutdown / Comms
 stm_com = Pin(43, Pin.OUT)
 stm_com.off()
 
-# Imports
+ # Imports
 from sim7080g import Cell
 from gps import GPS
 from time import sleep_ms, ticks_ms
 import gc
 import uasyncio as asyncio
 
-# Check if boot was for tracking or for 
+ # Check if boot was for tracking or for 
 track_pin = Pin(9, Pin.IN)
 TRACK = True if track_pin.value() else False
 
-# If running normally, import the screen driver
+ # If running normally, import the screen driver
 if not TRACK:
     from screen import TFT
 
-# Simpler swap-ins to help simplify typing
+ # Simpler swap-ins to help simplify typing
 ms = "ms"
 
-# initialize objects
+ # initialize objects
 cell = Cell()
 gps = GPS()
 
-# initialize IOs
+ # initialize IOs
 shut_off_pin = Pin(0, Pin.IN, Pin.PULL_UP)
 shut_off_pin2= Pin(44,Pin.IN, Pin.PULL_DOWN)
 
-# initialize slow objects if not tracking
+ # initialize slow objects if not tracking
 if not TRACK:
     tft = TFT()
 
-# Function Defines
+ # Function Defines
 
-# To shut everything down
+ # To shut everything down
 def shut_down():
     if cell.is_off:
         sleep_ms(500)
@@ -2900,7 +2900,7 @@ def track():
     except KeyboardInterrupt:
         return
     shut_down()
-# Main
+ # Main
 
 async def main():
     # Track if requested
