@@ -4310,3 +4310,20 @@ Ok, fine, fine I'll explain.
 See, the problem is that python comments always start with # and you'll see my journal has a lot of python code, so I had to edit all of those and it really isn't fun to go arround reading up how to do it and all and of course I had to like import it and get jumpscared and stuff when I saw the 500+ hours. As we all know, debugging takes forever, especially if it isn't your code...
 
 Total time spent: 50 minutes
+
+# 5/29/2026 - why the helly belly does this keep crashing randomly.
+
+I'd left this project for some time, but then I came back to it today (the 29th) and for whatever stupid reason, this came up:
+
+<img width="848" height="254" alt="image" src="https://github.com/user-attachments/assets/1b34ce9c-110c-49dc-bd33-1c2dbdb5bde8" />
+
+Like honestly bro???? Why. Its not like anyone was awake at 1 AM, it just randomly crashed out. The same thing happened to the board the other day, where it just failed too. I don't even know whatever in my code is causing this, just that this is really hella annoying.
+
+I feel like it might be some connectivity issue or somthing or maybe the STM32 glitched out and read a low battery voltage and just shut itself down? I honestly have no clue what so ever...
+
+I'll continue to ponder, but for now:
+
+Total time spent: 8 minutes.
+
+
+
