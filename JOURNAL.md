@@ -4335,4 +4335,33 @@ Like, honestly, how the heck does this happen??? The STM32 should just shut ever
 
 Total time spent: 9 minutes.
 
+# 5/29/2026 - Reboot & trying again
 
+I just really quickly restarted the board, and I can confirm that all is working well (I have a new battery in it)
+
+It is successfully turning itself on, and most importantly off.
+
+<img width="882" height="195" alt="image" src="https://github.com/user-attachments/assets/6b55c940-e285-425a-a033-4ad38ea62bbe" />
+
+Oh yipeee. And now the gps is acting up. Honestly I have no clue why its acting like this.
+
+---
+
+Some time later (re-assembled the screens onto the board)
+
+(My left screen scared me as it didn't turn on at first, but its ok it was just not in properly)\
+(I really need to buy myself some more wires, running out already... (it took me so long to find a male-to-male wire that is required to turn the board on))
+
+---
+
+Anyways, crisis averted, it appears that my GPS is all well and working!
+
+One thing I will note, however, is that it takes literally forever for the screens to turn on. (Yeah, its like 5 seconds, but that really does feel a lot longer if you don't know whether or not its turning on.)
+
+Ah well. I'm getting sleepy, and I guess I'll debug it the next time it stops.
+
+As a side note, I'm planning on adding the touch screen capabilities to the esp32 so that it will be able to ... uh ... I don't actually know ...
+
+This project lowk feels sort of dead, so I'm thinking that I will just submit it now, and maybe submit an upgrade to this later!
+
+Total time spent: 8 minutes.
