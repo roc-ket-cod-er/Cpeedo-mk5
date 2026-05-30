@@ -4386,6 +4386,7 @@ This is pretty tough to solve, and the only thing I can think of it adding more 
 
 Well that's it from me, as there really just wasn't much exciting... As always you can take a look at the lapse to see everything that happened! I even got a webcam to work so that you can see me mess around with the physical hardware!
 
+<img width="1920" height="1080" alt="WIN_20260530_14_35_10_Pro" src="https://github.com/user-attachments/assets/6f287044-6b06-48ca-8301-d26fcc4abb81" />
 
 
 
