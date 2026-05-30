@@ -4388,7 +4388,7 @@ Well that's it from me, as there really just wasn't much exciting... As always y
 
 <img width="1920" height="1080" alt="WIN_20260530_14_35_10_Pro" src="https://github.com/user-attachments/assets/6f287044-6b06-48ca-8301-d26fcc4abb81" />
 
-
+**Total time spent: 90 minutes**
 
 
 
