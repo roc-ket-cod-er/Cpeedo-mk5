@@ -4325,5 +4325,14 @@ I'll continue to ponder, but for now:
 
 Total time spent: 8 minutes.
 
+# 5/29/2026 - The batteries are dead.
+
+Yeah so if you look in the previous sreenshot, you'll see that the batteries were at 3.9V, and then I'm guessing it glitched out or something and just ran itself out all the way down to 2.6V, which is supposed to absolutely never happen. I'm actually so confused right now...
+
+<img width="901" height="263" alt="image" src="https://github.com/user-attachments/assets/52fb08f7-f278-4746-be77-1472aa8658ed" />
+
+Like, honestly, how the heck does this happen??? The STM32 should just shut everything down if the voltage drops below 3.2V, and it dropped so far. Like actually I have no clue what's going on...
+
+Total time spent: 9 minutes.
 
 
