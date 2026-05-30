@@ -4365,3 +4365,31 @@ As a side note, I'm planning on adding the touch screen capabilities to the esp3
 This project lowk feels sort of dead, so I'm thinking that I will just submit it now, and maybe submit an upgrade to this later!
 
 Total time spent: 8 minutes.
+
+# 5/30/2026 - Worked on touch interpretation, etc.
+
+Today I spent uh ... like 80 minutes working on getting the touch display to work, and then finding something useful to use it for. As of now, its just set up to make it so that if you hold your finger on the screen for about a second, then it will shut down!
+
+As always, here's a lapse: [LAPSE](https://lapse.hackclub.com/timelapse/NdMuIjbtYBSs)
+
+Anyways, I started out with working on remembering exactly what I did before, and that took some time because its been weeks since I worked on the coding part of this project, especially the SPI communcation.
+
+Anyways, nothing really exciting happened, except at one point I thought the battery was dead, but no for some reason the ESP32 was just shutting itself down as I was passing a integer into a function that required a string. Its funny that it didn't warn me...
+
+Anyways, as of now I made a library that will just take care of that, and yeah! It just works it works. That's all I can really say...
+
+ ### Back ground tasks
+
+There is this one litle problem that the ESP32 sort of is already so overworked that a background task (the touch updater) that should be running once every 10ms is instead only being able to run once every ... well a random amount of time.
+
+This is pretty tough to solve, and the only thing I can think of it adding more spots in the main loop where it awaits, allowing it to run. It really was running very inconsistantly...
+
+Well that's it from me, as there really just wasn't much exciting... As always you can take a look at the lapse to see everything that happened! I even got a webcam to work so that you can see me mess around with the physical hardware!
+
+
+
+
+
+
+
+
