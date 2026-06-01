@@ -4416,6 +4416,21 @@ I know it doesn't look red, but in reality it is. My webcam is just ... not web 
 
 **Total time spent: 52 minutes. **
 
+# 6/1/25 - Low Power LCD
+
+[LAPSE of research](https://lapse.hackclub.com/timelapse/msqAl3Q1Tw68)
+
+I may have forgotten to lapse journalling + pictures plus thinking...
+
+So, I was thinking of maybe setting up the LCD or something in away so that it would draw a minsicule amount of power, an amount that I was willing to sustain, and in turn, I'd be able to tap the display to turn it on. Like I'm going to be dead serious, no one on this planet would rather connect a wire than just press the on button. But hey, at least the spot will be very easy to use!
+
+The things that have to be shorted are in blue.
+
+<img width="1920" height="1080" alt="WIN_20260530_14_35_10_Pro" src="https://github.com/user-attachments/assets/89812a13-55f0-4382-90a1-2dfd056be026" />
+
+Hmmmm.... Do disregard the wires, I really do need a better spot to put them...
+
+**Total time spent: 8 minutes**
 
 
 
