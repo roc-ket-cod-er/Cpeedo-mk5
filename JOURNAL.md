@@ -4390,6 +4390,41 @@ Well that's it from me, as there really just wasn't much exciting... As always y
 
 **Total time spent: 90 minutes**
 
+# 5/31/2026 - Made a proper off button (and library)
+
+So yep! It's nice, but it just doesn't feel very nice as this is the syntax:
+
+`shut_down_button = Button(tft.right, 20, 240, 200, 60, tft.red, comms)`
+
+As always, here's the [LAPSE](https://lapse.hackclub.com/timelapse/MrhQYzmCghSV)
+
+Anyways, as I was saying, its quite a clunky implementation, with you having the pass the tft object, the x & y, the width & height, alongside the color you want the box to be, and if you want touch capabilities you need the touch library too. I wish there really was a better way...
+
+But hey, good news, I'm proud to say that: ***V1.1 IS COMPLETE!!!!!!!!!!***
+
+I've added all the functionality I'd like for now, and I will submit it!
+
+Anyways, back to the story, all was really going better than I could have hoped, until ... the button just wouldn't detect. I spent a bit of time debugging it, and it turns out I just used the wrong variable!
+
+I had: `min_y < y < min_y`, instead of it supposing to be `min_y < y < max_y`. Simple fix, and everything worked well afterwards!
+
+Once that was fixed, I can now confirm that touching the screen isn't going to shut it down unless you are pressing the big red box!
+
+<img width="216" height="139" alt="image" src="https://github.com/user-attachments/assets/d0606467-d7f3-4ded-85a6-38ddc72a33d2" />
+
+I know it doesn't look red, but in reality it is. My webcam is just ... not web camming.
+
+**Total time spent: 52 minutes. **
+
+
+
+
+
+
+
+
+
+
 
 
 
