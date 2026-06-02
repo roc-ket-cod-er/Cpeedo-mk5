@@ -4,6 +4,8 @@
 
 A _REALLY_ fancy bike speedo, designed in EasyEDA Pro and Fusion 360.
 
+<img width="480" height="640" alt="IMG_6912" src="https://github.com/user-attachments/assets/fa855968-013f-4cc2-85d6-a13aa94a5c32" />
+
 ![WIN_20260330_20_14_14_Pro](https://github.com/user-attachments/assets/ec0ffdfc-849b-4559-aedd-13fdfa4d90c0)
 
 ![WIN_20260330_20_20_43_Pro](https://github.com/user-attachments/assets/d3d685d1-3269-456b-b31e-6b3a4f122dad)
