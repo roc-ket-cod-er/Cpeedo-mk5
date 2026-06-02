@@ -4432,12 +4432,55 @@ Hmmmm.... Do disregard the wires, I really do need a better spot to put them...
 
 **Total time spent: 8 minutes**
 
+# 6/2/2026 - Finished project & Assembled & Got everything to work!
 
+Yupadoodle do, I got it to work!
 
+[NO LAPSE]()
 
+Firstly, pictures.
 
+<img width="480" height="640" alt="IMG_6914" src="https://github.com/user-attachments/assets/6fce395f-7c02-47bd-8ce8-b68d7ad26844" />
+<img width="480" height="640" alt="IMG_6912" src="https://github.com/user-attachments/assets/02a41121-080f-47bd-9ae4-b9fa6efc7f30" />
+<img width="480" height="640" alt="IMG_6911" src="https://github.com/user-attachments/assets/986bc03f-1760-4af5-808d-8e3f2972addf" />
+<img width="480" height="640" alt="IMG_6910" src="https://github.com/user-attachments/assets/9651b833-7fdd-4b8e-acfb-76a7e843e497" />
+<img width="480" height="640" alt="IMG_6909" src="https://github.com/user-attachments/assets/7aba54b3-4c36-4713-9496-4045dc297807" />
+<img width="480" height="640" alt="IMG_6908" src="https://github.com/user-attachments/assets/3cdabac0-fb5f-4a76-8c2b-e6771aa8993d" />
+<img width="480" height="640" alt="IMG_6907" src="https://github.com/user-attachments/assets/503d0284-9950-40e0-ae4d-8bdaf29e9ce5" />
+<img width="480" height="640" alt="IMG_6906" src="https://github.com/user-attachments/assets/55d37cf1-23dd-450a-9900-7645fb6a9e0e" />
+<img width="480" height="640" alt="IMG_6905" src="https://github.com/user-attachments/assets/fa62cf04-f0bf-48a8-896c-c1354ca2dfb1" />
+<img width="480" height="640" alt="IMG_6904" src="https://github.com/user-attachments/assets/a040a3e1-f8c9-43c6-8b62-5f2e39be19eb" />
+<img width="480" height="640" alt="IMG_6903" src="https://github.com/user-attachments/assets/685adea0-6eb5-4a52-9938-be9db350533c" />
 
+Lots of picutres.
 
+It really does work quite spectacularly, I've got to say. The feature where you can just press the big red square to turn it off is actually so useful, you wouldn't believe! Its so much nicer than using the wire to turn it on. My plan is to eventually implement it to use a magnet and sensor, but not right now. As of now I need to finally finish my first hackclub project! (That's fully journalled, that is)
+
+I also quickly davinici resolved this!
+
+https://github.com/user-attachments/assets/3af3387b-824d-45d4-b9fd-ac050e36a4d0
+
+It really does look nice in my opinion, but it is a very big brick so I guess its not the best...
+
+---
+
+Anyways, assembly took way longer than I thought because yet again I kept the tolerance incorrect, and so its not quite perfect for my bike, but I guess all that stff can be fixed pretty well. (In the end, only 3 of the 6 screws were able to be used.
+
+It did take quite a bit of drilling to make it work, but hey everything went well!
+
+I took it out for a ride at a decent pace of like 25km/h and everything was alright. If you see, in the video you occasionally hear a sharp click, but that's ok now that I've added a few more screws.
+
+In general though, I may want to reprint everything, once the tolerances are better, but with higher infill. Hmmmmmmmm
+
+Oh my it really does feel nice to be submitting a project ... FINALLY!!!!!!!
+
+I really hope this journal doesn't get deflated, but it did in fact take me this much time, because like its a mess and just finding where everything is and stuff takes so long :(
+
+Ah well, its up to the reviewer and their guidelines. I don't blame no one for my project being deflated like 15 hours, makes sense, it was journalled in the end 😭
+
+Until next time.
+
+**Total time spent: 1 hour**
 
 
 
