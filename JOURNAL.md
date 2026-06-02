@@ -4426,7 +4426,7 @@ So, I was thinking of maybe setting up the LCD or something in away so that it w
 
 The things that have to be shorted are in blue.
 
-<img width="1920" height="1080" alt="WIN_20260530_14_35_10_Pro" src="https://github.com/user-attachments/assets/89812a13-55f0-4382-90a1-2dfd056be026" />
+<img width="1920" height="1080" alt="WIN_20260601_19_37_56_Pro" src="https://github.com/user-attachments/assets/f22062d5-4aca-4ca0-8c51-014159f3f057" />
 
 Hmmmm.... Do disregard the wires, I really do need a better spot to put them...
 
