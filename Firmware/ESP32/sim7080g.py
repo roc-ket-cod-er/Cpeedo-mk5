@@ -59,6 +59,8 @@ class Cell(object):
             return None
         
     async def aat(self, cmd, wait=10, include="AT+", show=False, end="\n", exWait=0, search=False):
+        while not self.comms_availible:
+            await asyncio.sleep_ms(5)
         self.comms_availible = False
         resp = b''
         found = False
@@ -246,6 +248,9 @@ class Cell(object):
             self.at('SHCONN')
             
     async def aconnect(self, server, url='', force=False, show=True):
+        while not self.comms_availible:
+            await asyncio.sleep_ms(5)
+        self.comms_availible = False
         if not self.is_on:
             await self.aon()
             
@@ -296,6 +301,7 @@ class Cell(object):
             await self.aat(f'SHCONF="URL","{url}"')
             await self.aat('SHCONN')
         
+        self.comms_availible = True
         if show:
             print(self.is_connected, "connected, iirc")
             
@@ -322,8 +328,11 @@ class Cell(object):
             print(resp)
             
             
-    async def amsg(self, msg, feed="test"):
+    async def amsg(self, msg, feed, debug=False):
         await self.aconnect('io')
+        while not self.comms_availible:
+            await asyncio.sleep_ms(5)
+        self.comms_availible = False
         await self.aat(f'SMPUB="space_coder/feeds/{feed}",{len(str(msg))},1,0', end=" ", search=">")
         self.uart.write(str(msg))
             
@@ -338,11 +347,14 @@ class Cell(object):
                 if b'OK' in resp or b'ERROR' in resp:
                     found = True
                     break
-        try:
-            print(resp.decode())
-        except Exception as e:
-            print(e)
-            print(resp)
+        if debug:
+            try:
+                print(resp.decode())
+            except Exception as e:
+                print(e)
+                print(resp)
+                
+        self.comms_availible = True
     
     def sleep(self, duration, unit="s"):
         if unit == "s":
@@ -362,9 +374,20 @@ class Cell(object):
         except (IndexError, ValueError, AttributeError):
             return [-1, -1]
         
+    async def abtry(self):
+        try:
+            btry, btryV = await self.aat('CBC', show=False).split(',')[1:3]
+            
+            btryV = int(btryV[0:4])
+            btry = int(btry)
+            
+            return btry, btryV
+        except (IndexError, ValueError, AttributeError):
+            return [-1, -1]
+        
     @property
     def version(self):
-        return "v1.0.0"
+        return "v1.1.0"
     @property
     def _version(self):
-        return [1, 0, 0]
+        return [1, 1, 0]

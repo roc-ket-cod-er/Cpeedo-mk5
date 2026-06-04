@@ -6,7 +6,7 @@ class MQTT(object):
     def __init__(self, cell=None, wifi=None):
         if cell != None:
             try:
-                if cell._version[0] == 1:
+                if cell._version[0] == 1 and cell._version[1] == 1:
                     self.cell = cell
                     self.cell_setup = True
                 else:
@@ -38,7 +38,7 @@ class MQTT(object):
         else:
             raise ValueError("No wifi object or cell object given.")
         
-    async def _wifimsg(self, msg, feed, qos, show=True):
+    async def _wifimsg(self, msg, feed, qos, show=False):
         if self.wifi_setup:
             if self.wifi.is_on:
                 started = 'on'
@@ -78,7 +78,6 @@ class MQTT(object):
     async def amsg(self, msg, feed, prefer="wifi", qos=1, debug=False):
         st=ticks_ms()
         if prefer.lower() == "wifi":
-            print("wifi prefered")
             if await self._wifimsg(msg, feed, qos):
                 if debug:
                     print(ticks_ms() - st, 'wifi')
