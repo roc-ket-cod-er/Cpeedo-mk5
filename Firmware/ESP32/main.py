@@ -10,12 +10,13 @@ if not race_pin.value():
     import race
 # Imports
 from gps import GPS
-from time import sleep_ms, ticks_ms
+from time import sleep_ms, ticks_ms, ticks_diff
 import uasyncio as asyncio
 
 from wifi import Wifi
 from sim7080g import Cell
 from mqtt import MQTT
+from spi_comms import Comms
 
 # Check if boot was for tracking or for 
 track_pin = Pin(44, Pin.IN)
@@ -23,7 +24,7 @@ TRACK = True if track_pin.value() else False
 
 # If running normally, import other things and initialize screen
 if not TRACK:
-    from screen import TFT
+    from screen import TFT, Button
     import gc
     
     tft = TFT()
@@ -36,6 +37,7 @@ cell = Cell()
 gps = GPS()
 wifi = Wifi()
 mqtt = MQTT(cell, wifi)
+comms = Comms()
 
 # initialize IOs
 shut_off_pin = Pin(0, Pin.IN, Pin.PULL_UP)
@@ -45,22 +47,34 @@ shut_off_pin2= Pin(44,Pin.IN, Pin.PULL_DOWN)
 # -------------- Function Defines ---------------- #
 
 # To shut everything down
-def shut_down():
-    if cell.is_off:
+def shut_down(asap):
+    if cell.is_off and asap==False:
         sleep_ms(500)
     else:
         cell.off()
     stm_com.on()
     
+async def check_if_i_want_to_shutdown(shut_down_button):
+    await asyncio.sleep_ms(1000)
+    if shut_down_button.is_pressed():
+        tft.off()
+        shut_down(True)
+    
     
 async def update_mqtt():
-    global request_cell
     cell_free = False
     # Connect to mqtt
     await cell.aon()
     
     # Get Battery Percentage
     btry = cell.btry
+    
+    for i in range(5):
+        if btry == [1,1]:
+            await asyncio.sleep_ms(5)
+            btry = await cell.abtry()
+        else:
+            break
     
     # Updated screens
     if btry[0] < 30:
@@ -71,16 +85,17 @@ async def update_mqtt():
             tft.red,
             tft.black
         )
-    tft.right.write(
-        tft.font,
-        f"{btry[0]:02d}%",
-        160, 8,
-        tft.light_green,
-        tft.black
-    )
+    else:
+        tft.right.write(
+            tft.font,
+            f"{btry[0]:02d}%",
+            160, 8,
+            tft.light_green,
+            tft.black
+        )
     
     if gps.lock:
-        await mqtt.amsg(f'{gps.pos[1][0]} {gps.pos[1][1]} {gps.pos[0][0]} {gps.pos[0][1]}', "trips", qos=0)
+        await mqtt.amsg(f'{gps.pos[1][0]} {gps.pos[1][1]} {gps.pos[0][0]} {gps.pos[0][1]} {gps.spd}', "trips", qos=0)
     
     await cell.aoff()
     cell_free = True
@@ -138,14 +153,13 @@ async def track():
             cell.send_message(f"NO LOCK: {"/".join(map(str, gps.sats))}s {gps.gps.hdop} hdop {bat_list[1]}% ({bat_list[2][:-8]}mV) waited: {(ticks_ms()-st)//1000}s", feed='other-info')
     except Exception as e:
         print(e)
-        shut_down()
+        shut_down(True)
     except KeyboardInterrupt:
         return
-    shut_down()
+    shut_down(True)
     
 # -------------------- MAIN LOOP STARTS HERE -------------------- #
 async def main():
-    global request_cell
     # Track if requested
     if TRACK:
         await track()
@@ -169,10 +183,26 @@ async def main():
     last_cell_on = ticks_ms()-42_000
     sat_string = ''
     cell_free = True
-    request_cell = False
+    
+    last_one_sec_time = 0
+    
+        # for stopwatch
+    stop_watch_time = 0
+    stop_watch_offset = 0
+    stop_watch_running = False
     
     # Clear GPS Buffer
     gps.uart.read()
+    
+    # Start background asyncronous touch updater
+    asyncio.create_task(comms.background_touch_updater())
+    
+    # Buttons
+    shut_down_button = Button(tft.right, 20, 240, 200, 60, tft.red, comms)
+    gc_collect_button = Button(tft.right, 145, 85, 75, 25, tft.light_green, comms)
+    
+    start_stopwatch_button = Button(tft.right, 35, 180, 75, 35, tft.light_green, comms)
+    stop_stopwatch_button = Button(tft.right, 125, 180, 75, 35, tft.red, comms)
     
     # Run loop
     while True:
@@ -193,10 +223,10 @@ async def main():
         
         # Check if shutdown signal is given
         if not shut_off_pin.value() or shut_off_pin2.value():
-            shut_down()
+            shut_down(True)
             
         # Collect GC if it is getting full
-        if ticks_ms() > last_gc_collect + 120_000:
+        if ticks_ms() > last_gc_collect + 600_000:
             print("COLLECTING GARBAGE")
             gc.collect()
             last_gc_collect = ticks_ms()
@@ -271,7 +301,7 @@ async def main():
             await asyncio.sleep_ms(1)
             
             # Print info out
-            print(gps.time, gps.pos, gps.spd, gps.sats, gps.hdop, ticks_ms()-s_t, last_cell_on + 45_000 - ticks_ms(), gps.uart.any())
+            print(gps.time, 'gps.pos', gps.spd, gps.sats, gps.hdop, ticks_ms()-s_t, last_cell_on + 45_000 - ticks_ms(), gps.uart.any(), comms.touch_pos)
 
             # Re-allow updates
             gps.allow_updates()
@@ -292,7 +322,52 @@ async def main():
                 tft.white,
                 tft.black
             )
+            tft.right.write(
+                tft.small_font,
+                f"gc: {abs(ticks_ms() - last_gc_collect - 600_000)//1000}",
+                24, 84,
+                tft.white,
+                tft.black
+            )
+            tft.right.write(
+                tft.small_font,
+                f"{stop_watch_time:05d}     ",
+                82, 145,
+                tft.white,
+                tft.black
+            )
             s_t = ticks_ms() + 200
+            
+        await asyncio.sleep_ms(1)
+        if shut_down_button.is_pressed():
+            print("PRESSED")
+            asyncio.create_task(check_if_i_want_to_shutdown(shut_down_button))
+            
+        if gc_collect_button.is_pressed():
+            await asyncio.sleep_ms(100)
+            print("COLLECTING GARBAGE")
+            gc.collect()
+            last_gc_collect = ticks_ms()
+            
+            # await to give the async functions a chance
+            await asyncio.sleep_ms(10)
+            
+        if start_stopwatch_button.is_pressed():
+            stop_watch_running = True
+        elif stop_stopwatch_button.is_pressed():
+            if not stop_watch_running:
+                await asyncio.sleep_ms(400)
+                if stop_stopwatch_button.is_pressed():
+                    stop_watch_offset = 0
+            else:
+                stop_watch_running = False
+                
+        if stop_watch_running == True:
+            if stop_watch_offset == 0:
+                stop_watch_offset = ticks_ms()
+            stop_watch_time = ticks_diff(ticks_ms(), stop_watch_offset) // 1000
+        elif not stop_watch_offset:
+            stop_watch_time = 0                
                 
 
 if __name__ == '__main__':
