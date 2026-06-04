@@ -3,7 +3,7 @@ from time import sleep_us, ticks_ms
 
 spi = SPI(
     1,
-    baudrate=1000000,   # start slow for testing
+    baudrate=1_000_000,   # start slow for testing
     polarity=0,        # must match STM32 CPOL Low
     phase=0,           # must match STM32 CPHA 1 Edge
     bits=8,

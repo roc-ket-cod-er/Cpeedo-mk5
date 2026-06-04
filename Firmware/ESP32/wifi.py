@@ -125,11 +125,11 @@ class Wifi(object):
             # print(visible_networks)
             for network in self.wifi_info:
                 if network in visible_networks:
-                    print(network, end=" ")
+                    #print(network, end=" ")
                     if await self._connect(network, self.wifi_info[network], timeout):
-                        print("connected")
+                        #print("connected")
                         return True
-                    print("not connected")
+                    #print("not connected")
             return False
     
     def force_new_info(self, ssid, password):
